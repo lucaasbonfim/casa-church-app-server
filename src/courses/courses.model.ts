@@ -1,10 +1,10 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType } from "sequelize-typescript";
 
 @Table({
-  tableName: 'courses',
+  tableName: "courses",
   timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  createdAt: "created_at",
+  updatedAt: "updated_at",
 })
 export class Courses extends Model<Courses> {
   @Column({
@@ -29,18 +29,6 @@ export class Courses extends Model<Courses> {
     type: DataType.INTEGER,
   })
   duration_hours: number;
-
-  @Column({
-    type: DataType.DATE,
-    allowNull: false,
-  })
-  declare createdAt: Date;
-
-  @Column({
-    type: DataType.DATE,
-    allowNull: false,
-  })
-  declare updatedAt: Date;
 
   @Column({
     type: DataType.BOOLEAN,
