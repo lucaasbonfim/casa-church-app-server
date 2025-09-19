@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Student } from './students.model';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/sequelize";
+import { Student } from "../models/index";
 
 @Injectable()
 export class StudentsRepository {
   constructor(
     @InjectModel(Student)
-    private readonly studentModel: typeof Student,
+    private readonly studentModel: typeof Student
   ) {}
 
   async findAll(): Promise<Student[] | null> {
