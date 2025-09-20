@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/sequelize";
-import { Courses } from "./courses.model";
+import { Courses } from "../models/index";
 
 export class CoursesRepository {
   constructor(

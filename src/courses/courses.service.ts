@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CoursesRepository } from "./courses.repository";
-import { Courses } from "./courses.model";
+import { Courses } from "./entities/courses.model";
 
 @Injectable()
 export class CoursesService {

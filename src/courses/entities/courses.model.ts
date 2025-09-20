@@ -1,4 +1,11 @@
-import { Table, Column, Model, DataType } from "sequelize-typescript";
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  BelongsToMany,
+} from "sequelize-typescript";
+import { Student, StudentCourses } from "src/models";
 
 @Table({
   tableName: "courses",
@@ -35,4 +42,7 @@ export class Courses extends Model<Courses> {
     defaultValue: true,
   })
   active: boolean;
+
+  @BelongsToMany(() => Student, () => StudentCourses)
+  students: Student[];
 }

@@ -9,24 +9,24 @@ import {
   Body,
 } from "@nestjs/common";
 import { StudentsService } from "./students.service";
-import { Student } from "./students.model";
+import { Student } from "./entities/students.model";
 
 @Controller("students")
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Get()
-  getAll(): any {
+  getAll() {
     return this.studentsService.getAll();
   }
 
   @Get(":id")
-  getById(@Param("id") id: string): any {
+  getById(@Param("id") id: string) {
     return this.studentsService.getById(id);
   }
 
   @Post()
-  create(@Body() student: Student): any {
+  create(@Body() student: Student) {
     return this.studentsService.create(student);
   }
 

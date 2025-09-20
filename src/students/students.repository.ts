@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { Student } from "../models/index";
+import { Courses, Student } from "../models/index";
 
 @Injectable()
 export class StudentsRepository {
@@ -15,7 +15,14 @@ export class StudentsRepository {
   }
 
   async findById(id: string): Promise<Student | null> {
-    const student = await this.studentModel.findByPk(id);
+    const student = await this.studentModel.findByPk(id, {
+      include: [
+        {
+          model: Courses,
+          through: { attributes: [] },
+        },
+      ],
+    });
     return student;
   }
 

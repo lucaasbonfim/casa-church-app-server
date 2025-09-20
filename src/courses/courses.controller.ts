@@ -9,7 +9,7 @@ import {
   Body,
 } from "@nestjs/common";
 import { CoursesService } from "./courses.service";
-import { Courses } from "./courses.model";
+import { Courses } from "./entities/courses.model";
 
 @Controller("courses")
 export class CoursesController {
