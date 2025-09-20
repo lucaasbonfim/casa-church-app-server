@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CoursesRepository } from "./courses.repository";
 import { Courses } from "./entities/courses.model";
 import { CreateCourseDto } from "./dto/create-course.dto";
+import { UpdateCourseDto } from "./dto/update-course.dto";
+import { ReplaceCourseDto } from "./dto/replace-course.dto";
 
 @Injectable()
 export class CoursesService {
@@ -26,24 +28,30 @@ export class CoursesService {
     };
   }
 
-  async replace(id: string, newData: Courses) {
+  async replace(id: string, replaceCourseDto: ReplaceCourseDto) {
     const course = await this.courseRepository.getById(id);
 
     if (!course) throw new NotFoundException("Curso não encontrado");
 
-    const updatedCourse = await this.courseRepository.replace(id, newData);
+    const updatedCourse = await this.courseRepository.replace(
+      id,
+      replaceCourseDto
+    );
     return {
       message: "Curso atualizado com sucesso",
       updatedCourse,
     };
   }
 
-  async update(id: string, newData: Partial<Courses>) {
+  async update(id: string, updateCourseDto: UpdateCourseDto) {
     const course = await this.courseRepository.getById(id);
 
     if (!course) throw new NotFoundException("Curso não encontrado");
 
-    const updatedCourse = await this.courseRepository.update(id, newData);
+    const updatedCourse = await this.courseRepository.update(
+      id,
+      updateCourseDto
+    );
     return {
       message: "Curso atualizado com sucesso",
       updatedCourse,

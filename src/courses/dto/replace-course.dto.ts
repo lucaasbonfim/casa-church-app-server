@@ -1,16 +1,20 @@
-import { IsOptional, IsString, IsInt, Min, IsBoolean } from "class-validator";
+import { IsNotEmpty, IsString, IsInt, Min, IsBoolean } from "class-validator";
 
-export class UpdateCourseDto {
+export class ReplaceCourseDto {
+  @IsNotEmpty({ message: "O campo nome é obrigatório" })
   @IsString({ message: "O campo nome precisa ser do tipo texto" })
-  name?: string;
+  name: string;
 
+  @IsNotEmpty({ message: "O campo descrição é obrigatório" })
   @IsString({ message: "O campo descrição precisa ser do tipo texto" })
-  description?: string;
+  description: string;
 
+  @IsNotEmpty({ message: "O campo duração do curso é obrigatório" })
   @IsInt({ message: "A duração do curso deve ser um número inteiro" })
   @Min(1, { message: "A duração do curso deve ser maior que zero" })
-  duration_hours?: number;
+  duration_hours: number;
 
-  @IsBoolean({ message: "O campo ativado/desativo é do tipo boolean" })
-  active?: boolean;
+  @IsNotEmpty({ message: "O ativo/desativo nome é obrigatório" })
+  @IsBoolean({ message: "O campo ativo/desativo é do tipo boolean" })
+  active: boolean;
 }

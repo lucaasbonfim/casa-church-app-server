@@ -11,6 +11,8 @@ import {
 import { CoursesService } from "./courses.service";
 import { Courses } from "./entities/courses.model";
 import { CreateCourseDto } from "./dto/create-course.dto";
+import { UpdateCourseDto } from "./dto/update-course.dto";
+import { ReplaceCourseDto } from "./dto/replace-course.dto";
 
 @Controller("courses")
 export class CoursesController {
@@ -32,13 +34,13 @@ export class CoursesController {
   }
 
   @Put(":id")
-  replace(@Param("id") id: string, @Body() newData: Courses) {
-    return this.courseService.replace(id, newData);
+  replace(@Param("id") id: string, @Body() replaceCourseDto: ReplaceCourseDto) {
+    return this.courseService.replace(id, replaceCourseDto);
   }
 
   @Patch(":id")
-  update(@Param("id") id: string, @Body() newData: Courses) {
-    return this.courseService.update(id, newData);
+  update(@Param("id") id: string, @Body() updateCourseDto: UpdateCourseDto) {
+    return this.courseService.update(id, updateCourseDto);
   }
 
   @Delete(":id")

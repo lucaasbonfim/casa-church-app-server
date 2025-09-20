@@ -23,13 +23,13 @@ export class CoursesRepository {
     return newCourse;
   }
 
-  async replace(id: string, newData: Courses) {
+  async replace(id: string, newData) {
     const course = await this.getById(id);
 
     return await course!.update(newData);
   }
 
-  async update(id: string, newData: Partial<Courses>) {
+  async update(id: string, newData) {
     const course = await this.getById(id);
 
     return await course!.update(newData);
