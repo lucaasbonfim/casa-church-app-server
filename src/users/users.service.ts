@@ -3,19 +3,29 @@ import { NotFoundException, ConflictException } from "@nestjs/common";
 import { UsersRepository } from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { HashService } from "src/auth/hash/hash.service";
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly hashService: HashService
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const email = createUserDto.email;
-
-    const userExists = await this.usersRepository.findByEmail(email);
+    const userExists = await this.usersRepository.findByEmail(
+      createUserDto.email
+    );
     if (userExists)
       throw new ConflictException("Não foi possível concluir o cadastro.");
 
-    const user = await this.usersRepository.create(createUserDto);
+    const hashPassword = await this.hashService.hash(createUserDto.password);
+    const userData = {
+      ...createUserDto,
+      password: hashPassword,
+    };
+
+    const user = await this.usersRepository.create(userData);
     return {
       message: "Usuário criado com sucesso",
       user,
@@ -35,6 +45,11 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     const userExists = await this.usersRepository.findById(id);
     if (!userExists) throw new NotFoundException("Usuário não encontrado");
+
+    if (updateUserDto.password) {
+      const passwordHash = await this.hashService.hash(updateUserDto.password);
+      updateUserDto.password = passwordHash;
+    }
 
     const updatedUser = await this.usersRepository.update(id, updateUserDto);
     return {
