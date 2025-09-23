@@ -24,7 +24,7 @@ export class CreateUserDto {
   @IsNotEmpty({ message: "O campo senha não pode ser vazio." })
   @IsString({ message: "O campo senha deve ser um texto." })
   @MaxLength(255)
-  @MinLength(6)
+  @MinLength(6, { message: "A senha deve conter no mínimo 6 caracteres" })
   password: string;
 
   @IsNotEmpty({ message: "O campo cargo não pode ser vazio." })
