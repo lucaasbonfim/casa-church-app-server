@@ -15,7 +15,8 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.usersRepository.findByEmail(loginDto.email);
-    if (!user) throw new UnauthorizedException("Email ou senha inválidos");
+    if (!user || !user.active)
+      throw new UnauthorizedException("Email ou senha inválidos");
 
     const isValidPassword = await this.hashService.compare(
       loginDto.password,
