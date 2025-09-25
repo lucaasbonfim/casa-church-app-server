@@ -4,7 +4,6 @@ import {
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
-import { ModuleRef } from "@nestjs/core";
 import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
 import { REQUEST_TOKEN_PAYLOAD } from "../auth.constants";
@@ -12,24 +11,15 @@ import { UsersService } from "src/users/users.service";
 
 @Injectable()
 export class AuthTokenGuard implements CanActivate {
-  private usersService: UsersService;
   constructor(
     private readonly jwtService: JwtService,
-    private readonly moduleRef: ModuleRef
+    private readonly usersService: UsersService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if (!this.usersService) {
-      this.usersService = this.moduleRef.get(UsersService, { strict: false });
-      if (!this.usersService) {
-        throw new UnauthorizedException(
-          "Não foi possível acessar o serviço de usuários"
-        );
-      }
-    }
-
     const req: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(req);
+    console.log(token);
     if (!token) throw new UnauthorizedException("Falha na autenticação");
 
     try {
@@ -60,7 +50,9 @@ export class AuthTokenGuard implements CanActivate {
 
   extractTokenFromHeader(req: Request): string | undefined {
     const authorization = req.headers?.authorization;
+
     if (!authorization || typeof authorization !== "string") return;
-    return authorization.replace("Bearer ", "").trim();
+
+    return authorization.trim();
   }
 }
