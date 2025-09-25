@@ -1,3 +1,4 @@
+import { Type } from "class-transformer";
 import { IsString, IsNotEmpty, IsDate, MaxLength } from "class-validator";
 
 export class CreateEventDto {
@@ -18,9 +19,11 @@ export class CreateEventDto {
 
   @IsNotEmpty({ message: "O campo data de início não pode ser vazio." })
   @IsDate({ message: 'O campo data de início deve ser do tipo "data"' })
+  @Type(() => Date)
   startDate: Date;
 
   @IsNotEmpty({ message: "O campo data de término não pode ser vazio." })
   @IsDate({ message: 'O campo data de término deve ser do tipo "data"' })
+  @Type(() => Date)
   endDate: Date;
 }
