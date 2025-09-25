@@ -29,8 +29,10 @@ export class AuthTokenGuard implements CanActivate {
       });
 
       const user = await this.usersService.findOne(payload.id);
-      if (!user) {
-        throw new UnauthorizedException("Usuário não existe mais");
+      if (!user || !user.active) {
+        throw new UnauthorizedException(
+          "Usuário não existe mais ou foi desativado"
+        );
       }
 
       req[REQUEST_TOKEN_PAYLOAD] = {
