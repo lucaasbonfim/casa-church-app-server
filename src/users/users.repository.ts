@@ -16,11 +16,15 @@ export class UsersRepository {
   }
 
   async findAll() {
-    return this.userModel.findAll();
+    return this.userModel.findAll({
+      attributes: { exclude: ["password"] },
+    });
   }
 
   async findById(id: string) {
-    const user = await this.userModel.findByPk(id);
+    const user = await this.userModel.findByPk(id, {
+      attributes: { exclude: ["password"] },
+    });
 
     return user;
   }
