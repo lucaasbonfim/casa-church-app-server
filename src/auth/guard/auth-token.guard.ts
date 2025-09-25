@@ -7,19 +7,18 @@ import {
 import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
 import { REQUEST_TOKEN_PAYLOAD } from "../auth.constants";
-import { UsersService } from "src/users/users.service";
+import { AuthUsersService } from "../auth-users.service";
 
 @Injectable()
 export class AuthTokenGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService
+    private readonly authUsersService: AuthUsersService
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(req);
-    console.log(token);
     if (!token) throw new UnauthorizedException("Falha na autenticação");
 
     try {
@@ -29,7 +28,7 @@ export class AuthTokenGuard implements CanActivate {
         issuer: process.env.JWT_TOKEN_ISSUER,
       });
 
-      const user = await this.usersService.findOne(payload.id);
+      const user = await this.authUsersService.findOne(payload.id);
       if (!user || !user.active) {
         throw new UnauthorizedException(
           "Usuário não existe mais ou foi desativado"
