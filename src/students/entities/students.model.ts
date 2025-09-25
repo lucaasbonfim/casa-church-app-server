@@ -1,10 +1,17 @@
-import { Table, Column, DataType, Model } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  DataType,
+  Model,
+  BelongsToMany,
+} from "sequelize-typescript";
+import { Courses, StudentCourses } from "src/models";
 
 @Table({
-  tableName: 'student',
+  tableName: "student",
   timestamps: true,
-  createdAt: 'created_at',
-  updatedAt: 'updated_at',
+  createdAt: "created_at",
+  updatedAt: "updated_at",
 })
 export class Student extends Model<Student> {
   @Column({
@@ -37,4 +44,7 @@ export class Student extends Model<Student> {
     defaultValue: true,
   })
   active: boolean;
+
+  @BelongsToMany(() => Courses, () => StudentCourses)
+  courses: Courses[];
 }

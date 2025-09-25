@@ -7,41 +7,46 @@ import {
   Delete,
   Param,
   Body,
-} from '@nestjs/common';
-import { StudentsService } from './students.service';
-import { Student } from './students.model';
+} from "@nestjs/common";
+import { StudentsService } from "./students.service";
+import { CreateStudentDto } from "./dto/create-student.dto";
+import { ReplaceStudentDto } from "./dto/replace-student.dto";
+import { UpdateStudentDto } from "./dto/update-student.dto";
 
-@Controller('students')
+@Controller("students")
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Get()
-  getAll(): any {
+  getAll() {
     return this.studentsService.getAll();
   }
 
-  @Get(':id')
-  getById(@Param('id') id: string): any {
+  @Get(":id")
+  getById(@Param("id") id: string) {
     return this.studentsService.getById(id);
   }
 
   @Post()
-  create(@Body() student: Student): any {
-    return this.studentsService.create(student);
+  create(@Body() createStudentDto: CreateStudentDto) {
+    return this.studentsService.create(createStudentDto);
   }
 
-  @Put(':id')
-  replace(@Param('id') id: string, @Body() newData: Student) {
-    return this.studentsService.replace(id, newData);
+  @Put(":id")
+  replace(
+    @Param("id") id: string,
+    @Body() replaceStudentDto: ReplaceStudentDto
+  ) {
+    return this.studentsService.replace(id, replaceStudentDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() newData: Partial<Student>) {
-    return this.studentsService.update(id, newData);
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateStudentDto: UpdateStudentDto) {
+    return this.studentsService.update(id, updateStudentDto);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string) {
+  @Delete(":id")
+  delete(@Param("id") id: string) {
     return this.studentsService.delete(id);
   }
 }
