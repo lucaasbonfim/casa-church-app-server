@@ -1,5 +1,9 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { NotFoundException, ConflictException } from "@nestjs/common";
+import {
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+  ConflictException,
+} from "@nestjs/common";
 import { UsersRepository } from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -16,7 +20,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto, tokenPayload: TokenPayloadDto) {
     if (tokenPayload.role !== USER_ADMIN_ROLE) {
-      throw new UnauthorizedException(
+      throw new ForbiddenException(
         "Você não tem permissão para acessar este recurso."
       );
     }
@@ -56,7 +60,7 @@ export class UsersService {
     tokenPayload: TokenPayloadDto
   ) {
     if (tokenPayload.role !== USER_ADMIN_ROLE && id !== tokenPayload.id) {
-      throw new UnauthorizedException(
+      throw new ForbiddenException(
         "Você não tem permissão para acessar este recurso."
       );
     }
@@ -78,7 +82,7 @@ export class UsersService {
 
   async remove(id: string, tokenPayload: TokenPayloadDto) {
     if (tokenPayload.role !== USER_ADMIN_ROLE && id !== tokenPayload.id) {
-      throw new UnauthorizedException(
+      throw new ForbiddenException(
         "Você não tem permissão para acessar este recurso."
       );
     }
