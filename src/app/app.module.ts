@@ -6,6 +6,7 @@ import { DatabaseModule } from "src/config/database.module";
 import { UsersModule } from "src/users/users.module";
 import { EventsModule } from "src/events/events.module";
 import { RegistrationsModule } from "src/registrations/registrations.module";
+import { PostsModule } from "src/posts/posts.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RegistrationsModule } from "src/registrations/registrations.module";
     UsersModule,
     EventsModule,
     RegistrationsModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
