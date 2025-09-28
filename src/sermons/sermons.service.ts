@@ -11,7 +11,7 @@ import { USER_ADMIN_ROLE } from "src/users/user.constants";
 
 @Injectable()
 export class SermonsService {
-  constructor(private readonly SermonRepository: SermonsRepository) {}
+  constructor(private readonly SermonRepository: SermonsRepository) { }
 
   async create(
     createSermonDto: CreateSermonDto,
@@ -52,7 +52,7 @@ export class SermonsService {
     updateSermonDto: UpdateSermonDto,
     tokenPayload: TokenPayloadDto
   ) {
-    const sermonExists = this.findOne(id);
+    const sermonExists = this.SermonRepository.findById(id);
 
     if (!sermonExists) {
       throw new NotFoundException("Sermão não encontrado");
@@ -76,7 +76,7 @@ export class SermonsService {
   }
 
   async remove(id: string, tokenPayload: TokenPayloadDto) {
-    const sermonExists = this.findOne(id);
+    const sermonExists = this.SermonRepository.findById(id);
 
     if (!sermonExists) {
       throw new NotFoundException("Sermão não encontrado");
