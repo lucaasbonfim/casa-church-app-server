@@ -2,6 +2,8 @@ import { InjectModel } from "@nestjs/sequelize";
 import { User } from "src/models";
 import { CreateUser } from "./types/user.types";
 import { UpdateUser } from "./types/user.types";
+import { FindUsersDto } from "./dto/find-users.dto";
+import { Op } from "sequelize";
 
 export class UsersRepository {
   constructor(
@@ -15,10 +17,30 @@ export class UsersRepository {
     return createdUser;
   }
 
-  async findAll() {
-    return this.userModel.findAll({
+  async findAll(query: FindUsersDto) {
+    const { page, limit, name, orderBy, orderDirection } = query;
+
+    const offset = (page - 1) * limit;
+
+    const where: any = {};
+    if (name) {
+      where.name = { [Op.iLike]: `%${name}%` };
+    }
+
+    const { rows, count } = await this.userModel.findAndCountAll({
+      where,
+      limit,
+      offset,
+      order: [[orderBy, orderDirection]],
       attributes: { exclude: ["password"] },
     });
+
+    return {
+      total: count,
+      page,
+      pageCount: Math.ceil(count / limit),
+      users: rows,
+    };
   }
 
   async findById(id: string) {
