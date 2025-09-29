@@ -9,6 +9,7 @@ import { UpdateRegistrationDto } from "./dto/update-registration.dto";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { RegistrationsRepotisory } from "./registrations.repository";
 import { USER_ADMIN_ROLE } from "src/users/user.constants";
+import { FindRegistrationsQueryDto } from "./dto/find-registrations-query.dto";
 
 @Injectable()
 export class RegistrationsService {
@@ -46,14 +47,22 @@ export class RegistrationsService {
     };
   }
 
-  async findAll(tokenPayload: TokenPayloadDto, userId?: string | undefined) {
-    if (tokenPayload.role !== USER_ADMIN_ROLE && userId !== tokenPayload.id) {
+  async findAll(
+    tokenPayload: TokenPayloadDto,
+    findRegistrationsQuery: FindRegistrationsQueryDto
+  ) {
+    if (
+      tokenPayload.role !== USER_ADMIN_ROLE &&
+      findRegistrationsQuery.userId !== tokenPayload.id
+    ) {
       throw new ForbiddenException(
         "Você não tem permissão para acessar este recurso."
       );
     }
 
-    const registrations = await this.registrationRepository.findAll(userId);
+    const registrations = await this.registrationRepository.findAll(
+      findRegistrationsQuery
+    );
     return registrations;
   }
 

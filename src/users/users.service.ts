@@ -10,6 +10,7 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { HashService } from "src/auth/hash/hash.service";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { USER_ADMIN_ROLE } from "./user.constants";
+import { FindUsersQueryDto } from "./dto/find-users-query.dto";
 
 @Injectable()
 export class UsersService {
@@ -44,8 +45,8 @@ export class UsersService {
     };
   }
 
-  async findAll() {
-    return await this.usersRepository.findAll();
+  async findAll(findUsersQuery: FindUsersQueryDto) {
+    return await this.usersRepository.findAll(findUsersQuery);
   }
 
   async findOne(id: string) {

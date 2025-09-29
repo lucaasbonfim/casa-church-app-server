@@ -8,6 +8,7 @@ import { UpdateEventDto } from "./dto/update-event.dto";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { USER_ADMIN_ROLE } from "src/users/user.constants";
 import { EventsRepository } from "./events.repository";
+import { FindEventsQueryDto } from "./dto/find-events-query.dto";
 
 @Injectable()
 export class EventsService {
@@ -32,8 +33,8 @@ export class EventsService {
     };
   }
 
-  async findAll() {
-    return await this.eventsRepository.findAll();
+  async findAll(findEventsQuery: FindEventsQueryDto) {
+    return await this.eventsRepository.findAll(findEventsQuery);
   }
 
   async findOne(id: string) {

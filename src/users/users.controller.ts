@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
+import { FindUsersQueryDto } from "./dto/find-users-query.dto";
 import { AuthTokenGuard } from "src/auth/guard/auth-token.guard";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { TokenPayloadParam } from "src/auth/params/token-payload.param";
@@ -29,8 +31,8 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() findUsersQuery: FindUsersQueryDto) {
+    return this.usersService.findAll(findUsersQuery);
   }
 
   @Get(":id")

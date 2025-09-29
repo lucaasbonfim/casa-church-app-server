@@ -7,6 +7,7 @@ import { CreatePostDto } from "./dto/create-post.dto";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { USER_ADMIN_ROLE } from "src/users/user.constants";
 import { PostsRepository } from "./posts.repository";
+import { FindPostsQueryDto } from "./dto/find-posts-query.dto";
 
 @Injectable()
 export class PostsService {
@@ -25,8 +26,8 @@ export class PostsService {
     };
   }
 
-  async findAll() {
-    const posts = await this.postsRepository.findAll();
+  async findAll(findPostsQuery: FindPostsQueryDto) {
+    const posts = await this.postsRepository.findAll(findPostsQuery);
 
     return posts;
   }

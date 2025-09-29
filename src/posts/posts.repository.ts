@@ -1,6 +1,7 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { Post } from "src/models";
 import { CreatePost } from "./types/post.types";
+import { FindPostsQueryDto } from "./dto/find-posts-query.dto";
 
 export class PostsRepository {
   constructor(
@@ -14,10 +15,25 @@ export class PostsRepository {
     return createdPost;
   }
 
-  async findAll() {
-    const posts = await this.postModel.findAll();
+  async findAll(findPostsQuery: FindPostsQueryDto) {
+    const { page, limit, userId, orderBy, orderDirection } = findPostsQuery;
+    const offset = (page - 1) * limit;
 
-    return posts;
+    const where: any = {};
+    if (userId) where.userId = userId;
+    const { rows, count } = await this.postModel.findAndCountAll({
+      where,
+      limit,
+      offset,
+      order: [[orderBy, orderDirection]],
+    });
+
+    return {
+      total: count,
+      page,
+      totalPages: Math.ceil(count / limit),
+      posts: rows,
+    };
   }
 
   async findById(id: string) {

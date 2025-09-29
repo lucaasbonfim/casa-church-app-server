@@ -7,12 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { AuthTokenGuard } from "src/auth/guard/auth-token.guard";
 import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
+import { FindPostsQueryDto } from "./dto/find-posts-query.dto";
 
 @UseGuards(AuthTokenGuard)
 @Controller("posts")
@@ -28,8 +30,8 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  findAll(@Query() findPostsQuery: FindPostsQueryDto) {
+    return this.postsService.findAll(findPostsQuery);
   }
 
   @Get(":id")
