@@ -1,6 +1,8 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { Event } from "src/models";
 import { CreateEvent, UpdateEvent } from "./types/event.types";
+import { FindEventsQueryDto } from "./dto/find-events-query.dto";
+import { Op } from "sequelize";
 
 export class EventsRepository {
   constructor(
@@ -14,8 +16,43 @@ export class EventsRepository {
     return createdEvent;
   }
 
-  async findAll() {
-    return await this.eventModel.findAll();
+  async findAll(findEventsQuery: FindEventsQueryDto) {
+    const {
+      page,
+      limit,
+      title,
+      startDate,
+      endDate,
+      createdBy,
+      orderBy,
+      orderDirection,
+    } = findEventsQuery;
+    const offset = (page - 1) * limit;
+
+    const where: any = {};
+    if (title) where.title = { [Op.iLike]: `%${title}%` };
+    if (createdBy) where.createdBy = createdBy;
+    if (startDate && endDate) {
+      where.startDate = { [Op.between]: [startDate, endDate] };
+    } else if (startDate) {
+      where.startDate = { [Op.gte]: startDate };
+    } else if (endDate) {
+      where.startDate = { [Op.lte]: endDate };
+    }
+
+    const { rows, count } = await this.eventModel.findAndCountAll({
+      where,
+      limit,
+      offset,
+      order: [[orderBy, orderDirection]],
+    });
+
+    return {
+      total: count,
+      page,
+      totalPages: Math.ceil(count / limit),
+      events: rows,
+    };
   }
 
   async findById(id: string) {

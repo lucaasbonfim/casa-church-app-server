@@ -4,6 +4,7 @@ import {
   CreateRegistration,
   UpdateRegistration,
 } from "./types/registration.types";
+import { FindRegistrationsQueryDto } from "./dto/find-registrations-query.dto";
 
 export class RegistrationsRepotisory {
   constructor(
@@ -17,14 +18,29 @@ export class RegistrationsRepotisory {
     return createdRegistration;
   }
 
-  async findAll(userId?: string) {
-    const whereClause = userId ? { userId } : {};
+  async findAll(findRegistrationsQuery: FindRegistrationsQueryDto) {
+    console.log(findRegistrationsQuery);
+    const { page, limit, userId, eventId, orderBy, orderDirection } =
+      findRegistrationsQuery;
+    const offset = (page - 1) * limit;
 
-    const registrations = await this.registrationModel.findAll({
-      where: whereClause,
+    const where: any = {};
+    if (userId) where.userId = userId;
+    if (eventId) where.eventId = eventId;
+
+    const { rows, count } = await this.registrationModel.findAndCountAll({
+      where,
+      limit,
+      offset,
+      order: [[orderBy, orderDirection]],
     });
 
-    return registrations;
+    return {
+      total: count,
+      page,
+      totalPages: Math.ceil(count / limit),
+      registrations: rows,
+    };
   }
 
   async findById(id: string) {

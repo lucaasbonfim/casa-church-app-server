@@ -15,6 +15,7 @@ import { AuthTokenGuard } from "src/auth/guard/auth-token.guard";
 import { UseGuards } from "@nestjs/common";
 import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
+import { FindRegistrationsQueryDto } from "./dto/find-registrations-query.dto";
 
 @UseGuards(AuthTokenGuard)
 @Controller("registrations")
@@ -35,9 +36,12 @@ export class RegistrationsController {
   @Get()
   findAll(
     @TokenPayloadParam() tokenPayload: TokenPayloadDto,
-    @Query("userId") userId?: string
+    @Query() findRegistrationsQuery: FindRegistrationsQueryDto
   ) {
-    return this.registrationsService.findAll(tokenPayload, userId);
+    return this.registrationsService.findAll(
+      tokenPayload,
+      findRegistrationsQuery
+    );
   }
 
   @Get(":id")
