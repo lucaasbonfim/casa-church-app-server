@@ -9,7 +9,15 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { HashService } from "src/auth/hash/hash.service";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
-import { USER_ADMIN_ROLE } from "./user.constants";
+import {
+  CREATE_USER_CONFLICT_MESSAGE,
+  CREATED_USER_MESSAGE,
+  DELETED_USER_MESSAGE,
+  NOT_FOUND_USER_MESSAGE,
+  UPDATED_USER_MESSAGE,
+  USER_ADMIN_ROLE,
+} from "./user.constants";
+import { FORBIDDEN_OPERATION_MESSAGE } from "src/common/constants/messages.constants";
 import { FindUsersQueryDto } from "./dto/find-users-query.dto";
 
 @Injectable()
@@ -21,16 +29,13 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto, tokenPayload: TokenPayloadDto) {
     if (tokenPayload.role !== USER_ADMIN_ROLE) {
-      throw new ForbiddenException(
-        "Você não tem permissão para acessar este recurso."
-      );
+      throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
 
     const userExists = await this.usersRepository.findByEmail(
       createUserDto.email
     );
-    if (userExists)
-      throw new ConflictException("Não foi possível concluir o cadastro.");
+    if (userExists) throw new ConflictException(CREATE_USER_CONFLICT_MESSAGE);
 
     const hashPassword = await this.hashService.hash(createUserDto.password);
     const userData = {
@@ -40,7 +45,7 @@ export class UsersService {
 
     const user = await this.usersRepository.create(userData);
     return {
-      message: "Usuário criado com sucesso",
+      message: CREATED_USER_MESSAGE,
       user,
     };
   }
@@ -51,7 +56,7 @@ export class UsersService {
 
   async findOne(id: string) {
     const user = await this.usersRepository.findById(id);
-    if (!user) throw new NotFoundException("Usuário não encontrado");
+    if (!user) throw new NotFoundException(NOT_FOUND_USER_MESSAGE);
     return user;
   }
 
@@ -61,13 +66,11 @@ export class UsersService {
     tokenPayload: TokenPayloadDto
   ) {
     if (tokenPayload.role !== USER_ADMIN_ROLE && id !== tokenPayload.id) {
-      throw new ForbiddenException(
-        "Você não tem permissão para acessar este recurso."
-      );
+      throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
 
     const userExists = await this.usersRepository.findById(id);
-    if (!userExists) throw new NotFoundException("Usuário não encontrado");
+    if (!userExists) throw new NotFoundException(NOT_FOUND_USER_MESSAGE);
 
     if (updateUserDto.password) {
       const passwordHash = await this.hashService.hash(updateUserDto.password);
@@ -76,24 +79,22 @@ export class UsersService {
 
     const updatedUser = await this.usersRepository.update(id, updateUserDto);
     return {
-      message: "Usuário atualizado com sucesso",
+      message: UPDATED_USER_MESSAGE,
       user: updatedUser,
     };
   }
 
   async remove(id: string, tokenPayload: TokenPayloadDto) {
     if (tokenPayload.role !== USER_ADMIN_ROLE && id !== tokenPayload.id) {
-      throw new ForbiddenException(
-        "Você não tem permissão para acessar este recurso."
-      );
+      throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
 
     const userExists = await this.usersRepository.findById(id);
-    if (!userExists) throw new NotFoundException("Usuário não encontrado");
+    if (!userExists) throw new NotFoundException(NOT_FOUND_USER_MESSAGE);
 
     await this.usersRepository.delete(id);
     return {
-      message: "Usuário deletado com sucesso",
+      message: DELETED_USER_MESSAGE,
     };
   }
 }

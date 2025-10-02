@@ -19,7 +19,6 @@ export class RegistrationsRepotisory {
   }
 
   async findAll(findRegistrationsQuery: FindRegistrationsQueryDto) {
-    console.log(findRegistrationsQuery);
     const { page, limit, userId, eventId, orderBy, orderDirection } =
       findRegistrationsQuery;
     const offset = (page - 1) * limit;
