@@ -4,6 +4,7 @@ import { UsersRepository } from "src/users/users.repository";
 import { UnauthorizedException } from "@nestjs/common";
 import { HashService } from "./hash/hash.service";
 import { JwtService } from "@nestjs/jwt";
+import { UNAUTHORIZED_EMAIL_PASSWORD_MESSAGE } from "./auth.constants";
 
 @Injectable()
 export class AuthService {
@@ -16,14 +17,14 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const user = await this.usersRepository.findByEmail(loginDto.email);
     if (!user || !user.active)
-      throw new UnauthorizedException("Email ou senha inválidos");
+      throw new UnauthorizedException(UNAUTHORIZED_EMAIL_PASSWORD_MESSAGE);
 
     const isValidPassword = await this.hashService.compare(
       loginDto.password,
       user.password
     );
     if (!isValidPassword)
-      throw new UnauthorizedException("Email ou senha inválidos");
+      throw new UnauthorizedException(UNAUTHORIZED_EMAIL_PASSWORD_MESSAGE);
 
     const token = await this.jwtService.signAsync(
       {
