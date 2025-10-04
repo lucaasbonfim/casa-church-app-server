@@ -15,6 +15,7 @@ import { AuthTokenGuard } from "src/auth/guard/auth-token.guard";
 import { UseGuards } from "@nestjs/common";
 import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
+import { FindLessonQueryDto } from "./dto/find-lesson-query.dto";
 
 @UseGuards(AuthTokenGuard)
 @Controller("lessons")
@@ -30,8 +31,10 @@ export class LessonsController {
   }
 
   @Get()
-  findAll(@Query("sermonId") sermonId: string) {
-    return this.lessonsService.findAll(sermonId);
+  findAll(
+    @Query() findLessonQueryDto: FindLessonQueryDto
+  ) {
+    return this.lessonsService.findAll(findLessonQueryDto);
   }
 
   @Get(":id")

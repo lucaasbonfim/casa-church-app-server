@@ -1,5 +1,6 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { Lesson } from "src/models";
+import { FindLessonQueryDto } from "./dto/find-lesson-query.dto";
 
 export class LessonsRepository {
   constructor(
@@ -13,10 +14,23 @@ export class LessonsRepository {
     return createdLesson;
   }
 
-  async findAll(sermonId?: string) {
-    const where = sermonId ? { sermonId } : {};
-    const lessons = await this.lessonModel.findAll({ where });
-    return lessons;
+  async findAll(findLessonQuery: FindLessonQueryDto) {
+    const { sermonId ,page, limit, orderBy, orderDirection } = findLessonQuery;
+    const offset = (page - 1) * limit;
+
+    const { rows, count } = await this.lessonModel.findAndCountAll({
+      where: { sermonId },
+      limit,
+      offset,
+      order: [[orderBy, orderDirection]],
+    });
+
+    return {
+      total: count,
+      page,
+      totalPages: Math.ceil(count / limit),
+      lessons: rows,
+    };
   }
 
   async findById(id: string) {

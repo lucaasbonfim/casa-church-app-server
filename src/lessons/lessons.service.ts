@@ -8,6 +8,7 @@ import { UpdateLessonDto } from "./dto/update-lesson.dto";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { LessonsRepository } from "./lessons.repository";
 import { USER_ADMIN_ROLE } from "src/users/user.constants";
+import { FindLessonQueryDto } from "./dto/find-lesson-query.dto";
 
 @Injectable()
 export class LessonsService {
@@ -31,8 +32,9 @@ export class LessonsService {
     };
   }
 
-  async findAll(sermonId) {
-    const lessons = await this.LessonRepository.findAll(sermonId);
+  async findAll(query: FindLessonQueryDto) {
+
+    const lessons = await this.LessonRepository.findAll(query);
 
     return lessons;
   }
