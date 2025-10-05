@@ -73,7 +73,7 @@ export class RegistrationsService {
   async findOne(id: string, tokenPayload: TokenPayloadDto) {
     const registration = await this.registrationRepository.findById(id);
     if (!registration) {
-      throw new NotFoundException();
+      throw new NotFoundException(NOT_FOUND_REGISTRATION_MESSAGE);
     }
 
     if (
