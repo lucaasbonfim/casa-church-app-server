@@ -9,6 +9,13 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { LessonsRepository } from "./lessons.repository";
 import { USER_ADMIN_ROLE } from "src/users/user.constants";
 import { FindLessonQueryDto } from "./dto/find-lesson-query.dto";
+import { FORBIDDEN_OPERATION_MESSAGE } from "src/common/constants/messages.constants";
+import {
+  NOT_FOUND_LESSON,
+  CREATED_LESSON_MESSAGE,
+  UPDATED_LESSON_MESSAGE,
+  DELETED_LESSON_MESSAGE,
+} from "./lessons.constants";
 
 @Injectable()
 export class LessonsService {
@@ -19,21 +26,18 @@ export class LessonsService {
     tokenPayload: TokenPayloadDto
   ) {
     if (tokenPayload.role !== USER_ADMIN_ROLE) {
-      throw new ForbiddenException(
-        "Você não tem permissão para acessar este recurso."
-      );
+      throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
 
     const createdLesson = await this.LessonRepository.create(createLessonDto);
 
     return {
-      message: "Aula criada com sucesso",
+      message: CREATED_LESSON_MESSAGE,
       sermon: createdLesson,
     };
   }
 
   async findAll(query: FindLessonQueryDto) {
-
     const lessons = await this.LessonRepository.findAll(query);
 
     return lessons;
@@ -43,7 +47,7 @@ export class LessonsService {
     const lesson = await this.LessonRepository.findById(id);
 
     if (!lesson) {
-      throw new NotFoundException("Aula não encontrada");
+      throw new NotFoundException(NOT_FOUND_LESSON);
     }
 
     return lesson;
@@ -57,13 +61,11 @@ export class LessonsService {
     const LessonExists = this.LessonRepository.findById(id);
 
     if (!LessonExists) {
-      throw new NotFoundException("Aula não encontrada");
+      throw new NotFoundException(NOT_FOUND_LESSON);
     }
 
     if (tokenPayload.role !== USER_ADMIN_ROLE) {
-      throw new ForbiddenException(
-        "Você não tem permissão para acessar este recurso."
-      );
+      throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
 
     const updatedLesson = await this.LessonRepository.update(
@@ -72,7 +74,7 @@ export class LessonsService {
     );
 
     return {
-      message: "Aula atualizada com sucesso",
+      message: UPDATED_LESSON_MESSAGE,
       lesson: updatedLesson,
     };
   }
@@ -81,19 +83,17 @@ export class LessonsService {
     const lessonExists = this.LessonRepository.findById(id);
 
     if (!lessonExists) {
-      throw new NotFoundException("Sermão não encontrado");
+      throw new NotFoundException(NOT_FOUND_LESSON);
     }
 
     if (tokenPayload.role !== USER_ADMIN_ROLE) {
-      throw new ForbiddenException(
-        "Você não tem permissão para acessar este recurso."
-      );
+      throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
 
     await this.LessonRepository.delete(id);
 
     return {
-      message: "Aula deletada com sucesso",
+      message: DELETED_LESSON_MESSAGE,
     };
   }
 }
