@@ -8,6 +8,7 @@ import { PostsModule } from "src/posts/posts.module";
 import { SermonsModule } from "src/sermons/sermons.module";
 import { LessonsModule } from "src/lessons/lessons.module";
 import { ContactMessagesModule } from "src/contact-messages/contact-messages.module";
+import { DonationsModule } from "src/donations/donations.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ContactMessagesModule } from "src/contact-messages/contact-messages.mod
     LessonsModule,
     SermonsModule,
     ContactMessagesModule,
+    DonationsModule,
   ],
 })
 export class AppModule {}
