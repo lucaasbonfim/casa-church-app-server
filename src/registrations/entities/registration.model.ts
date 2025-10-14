@@ -10,6 +10,7 @@ import {
   Model,
 } from "sequelize-typescript";
 import { User, Event } from "src/models";
+import { RegistrationStatus } from "../types/registration.types";
 
 @Table({ tableName: "registrations", schema: "casa-church", timestamps: true })
 export class Registration extends Model<Registration> {
@@ -26,9 +27,9 @@ export class Registration extends Model<Registration> {
   @Column({ type: DataType.UUID })
   declare eventId: string;
 
-  @Default("Pendente")
-  @Column({ type: DataType.STRING(50) })
-  declare status: string;
+  @Default(RegistrationStatus.PENDING)
+  @Column(DataType.ENUM(...Object.values(RegistrationStatus)))
+  declare role: RegistrationStatus;
 
   @CreatedAt
   declare createdAt: Date;

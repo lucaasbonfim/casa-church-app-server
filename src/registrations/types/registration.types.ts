@@ -6,3 +6,9 @@ export type CreateRegistration = {
 export type UpdateRegistration = {
   status?: string;
 };
+
+export enum RegistrationStatus {
+  CONFIRMED = "confirmed",
+  PENDING = "pending",
+  CANCELED = "canceled",
+}
