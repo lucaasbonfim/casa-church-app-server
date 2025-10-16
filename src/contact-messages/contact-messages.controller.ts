@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
 
 import { ContactMessagesService } from "./contact-messages.service";
@@ -14,6 +15,7 @@ import { CreateContactMessageDto } from "./dto/create-contact-message.dto";
 import { UpdateContactMessageDto } from "./dto/update-contact-message.dto";
 import { AuthTokenGuard } from "src/auth/guard/auth-token.guard";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
@@ -31,6 +33,7 @@ export class ContactMessagesController {
 
   @ApiOperation({ summary: "Listar todas as mensagens do fórum de discussão" })
   @Get()
+  @UseInterceptors(CacheInterceptor)
   findAll() {
     return this.contactMessagesService.findAll();
   }
@@ -39,6 +42,7 @@ export class ContactMessagesController {
     summary: "Listar detalhes de uma mensagem do fórum de discussão",
   })
   @Get(":id")
+  @UseInterceptors(CacheInterceptor)
   findOne(@Param("id") id: string) {
     return this.contactMessagesService.findOne(id);
   }

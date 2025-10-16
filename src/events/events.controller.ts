@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Query,
+  UseInterceptors,
 } from "@nestjs/common";
 import { EventsService } from "./events.service";
 import { CreateEventDto } from "./dto/create-event.dto";
@@ -17,6 +18,7 @@ import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { FindEventsQueryDto } from "./dto/find-events-query.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
@@ -35,12 +37,14 @@ export class EventsController {
 
   @ApiOperation({ summary: "Listar todos os eventos" })
   @Get()
+  @UseInterceptors(CacheInterceptor)
   findAll(@Query() findEventsQuery: FindEventsQueryDto) {
     return this.eventsService.findAll(findEventsQuery);
   }
 
   @ApiOperation({ summary: "Listar detalhes de um evento especifico" })
   @Get(":id")
+  @UseInterceptors(CacheInterceptor)
   findOne(@Param("id") id: string) {
     return this.eventsService.findOne(id);
   }

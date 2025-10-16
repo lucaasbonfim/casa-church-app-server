@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
 } from "@nestjs/common";
 import { LessonsService } from "./lessons.service";
 import { CreateLessonDto } from "./dto/create-lesson.dto";
@@ -17,6 +18,7 @@ import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { FindLessonQueryDto } from "./dto/find-lesson-query.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
@@ -35,12 +37,14 @@ export class LessonsController {
 
   @ApiOperation({ summary: "Listar todas as aulas" })
   @Get()
+  @UseInterceptors(CacheInterceptor)
   findAll(@Query() findLessonQueryDto: FindLessonQueryDto) {
     return this.lessonsService.findAll(findLessonQueryDto);
   }
 
   @ApiOperation({ summary: "Listar detalhes de uma aula específica" })
   @Get(":id")
+  @UseInterceptors(CacheInterceptor)
   findOne(@Param("id") id: string) {
     return this.lessonsService.findOne(id);
   }
