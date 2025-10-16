@@ -15,8 +15,7 @@ export const models = [
   Sermon,
   Lesson,
   ContactMessage,
-  ,
   Donation,
 ];
 
-export { User, Event, Registration, Post, Sermon, ContactMessage };
+export { User, Event, Registration, Post, Sermon, Lesson, ContactMessage, Donation };
