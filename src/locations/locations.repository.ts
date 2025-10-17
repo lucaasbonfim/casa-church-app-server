@@ -2,6 +2,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { Location } from "src/models";
 import { FindLocationsQueryDto } from "./dto/find-locations-query.dto";
 import { Op } from "sequelize";
+import { CreateLocation, UpdateLocation } from "./types/locations.types";
 
 export class LocationsRepository {
   constructor(
@@ -9,7 +10,7 @@ export class LocationsRepository {
     private readonly locationModel: typeof Location
   ) {}
 
-  async create(data) {
+  async create(data: CreateLocation) {
     const createdLocation = await this.locationModel.create(data);
     return createdLocation;
   }
@@ -54,7 +55,7 @@ export class LocationsRepository {
     return location;
   }
 
-  async update(id: string, data) {
+  async update(id: string, data: UpdateLocation) {
     const location = await this.findById(id);
     return await location!.update(data);
   }
