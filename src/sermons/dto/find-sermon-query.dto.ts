@@ -7,16 +7,9 @@ import {
   IsUUID,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
-export class FindLessonQueryDto {
-  @ApiProperty({
-    example: "5ccc3035-ae93-4c86-969b-d6610c516e73",
-    description: "ID do sermão no formato UUID v4",
-  })
-  @IsUUID("4", { message: "O parâmetro sermão é inválido." })
-  sermonId: string;
-
+export class FindSermonQueryDto {
   @ApiPropertyOptional({
     example: 1,
     description: "Número da página a ser retornada (mínimo 1)",
@@ -51,8 +44,6 @@ export class FindLessonQueryDto {
     description: "Direção da ordenação (ASC ou DESC)",
   })
   @IsOptional()
-  @IsIn(["ASC", "DESC"], {
-    message: "O parâmetro direção deve ser ASC ou DESC",
-  })
+  @IsIn(["ASC", "DESC"], {})
   orderDirection: "ASC" | "DESC" = "DESC";
 }

@@ -13,6 +13,7 @@ import { DonationsModule } from "src/donations/donations.module";
 import { CommentsModule } from "src/comments/comments.module";
 import { LikesModule } from "src/likes/likes.module";
 import { LocationsModule } from "src/locations/locations.module";
+import { LessonProgressModule } from "src/lesson-progress/lesson-progress.module";
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { LocationsModule } from "src/locations/locations.module";
     RegistrationsModule,
     PostsModule,
     LessonsModule,
+    LessonProgressModule,
     SermonsModule,
     ContactMessagesModule,
     DonationsModule,

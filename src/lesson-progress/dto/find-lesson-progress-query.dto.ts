@@ -7,15 +7,18 @@ import {
   IsUUID,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { UUIDV4 } from "sequelize";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
-export class FindLessonQueryDto {
-  @ApiProperty({
+export class FindLessonProgressDto {
+  @ApiPropertyOptional({
     example: "5ccc3035-ae93-4c86-969b-d6610c516e73",
-    description: "ID do sermão no formato UUID v4",
+    description: "ID da aula no formato UUID v4",
   })
-  @IsUUID("4", { message: "O parâmetro sermão é inválido." })
-  sermonId: string;
+  @IsOptional()
+  @Type(() => UUIDV4)
+  @IsUUID(4, { message: "O parâmetro aula deve ser uma string" })
+  lessonId: string;
 
   @ApiPropertyOptional({
     example: 1,
@@ -51,8 +54,6 @@ export class FindLessonQueryDto {
     description: "Direção da ordenação (ASC ou DESC)",
   })
   @IsOptional()
-  @IsIn(["ASC", "DESC"], {
-    message: "O parâmetro direção deve ser ASC ou DESC",
-  })
+  @IsIn(["ASC", "DESC"], {})
   orderDirection: "ASC" | "DESC" = "DESC";
 }

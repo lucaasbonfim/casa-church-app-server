@@ -1,5 +1,6 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { Sermon } from "src/models";
+import { FindSermonQueryDto } from "./dto/find-sermon-query.dto";
 
 export class SermonsRepository {
   constructor(
@@ -13,10 +14,22 @@ export class SermonsRepository {
     return createdSermon;
   }
 
-  async findAll() {
-    const sermons = await this.sermonModel.findAll();
+  async findAll(findSermonQuery: FindSermonQueryDto) {
+    const { page, limit, orderBy, orderDirection } = findSermonQuery;
+    const offset = (page - 1) * limit;
 
-    return sermons;
+    const { rows, count } = await this.sermonModel.findAndCountAll({
+      limit,
+      offset,
+      order: [[orderBy, orderDirection]],
+    });
+
+    return {
+      total: count,
+      page,
+      totalPages: Math.ceil(count / limit),
+      sermons: rows,
+    };
   }
 
   async findById(id: string) {

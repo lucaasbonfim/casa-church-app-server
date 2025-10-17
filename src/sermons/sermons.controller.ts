@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseInterceptors,
+  Query,
 } from "@nestjs/common";
 import { SermonsService } from "./sermons.service";
 import { CreateSermonDto } from "./dto/create-sermon.dto";
@@ -17,6 +18,7 @@ import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { FindSermonQueryDto } from "./dto/find-sermon-query.dto";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
@@ -36,8 +38,8 @@ export class SermonsController {
   @ApiOperation({ summary: "Listar todos os sermões" })
   @Get()
   @UseInterceptors(CacheInterceptor)
-  findAll() {
-    return this.sermonsService.findAll();
+  findAll(@Query() findSermonQueryDto: FindSermonQueryDto) {
+    return this.sermonsService.findAll(findSermonQueryDto);
   }
 
   @ApiOperation({ summary: "Listar detalhes de um sermão específico" })

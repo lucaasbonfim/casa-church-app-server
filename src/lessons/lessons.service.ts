@@ -43,6 +43,7 @@ export class LessonsService {
     return lessons;
   }
 
+  
   async findOne(id: string) {
     const lesson = await this.LessonRepository.findById(id);
 
