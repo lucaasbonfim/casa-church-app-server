@@ -22,8 +22,8 @@ export const models = [
   Donation,
   LessonProgress,
   Like,
-  Comment, 
-  Location
+  Comment,
+  Location,
 ];
 
 export {
@@ -34,6 +34,9 @@ export {
   Sermon,
   Lesson,
   ContactMessage,
-  Donation, Like, Comment, Location,
+  Donation,
+  Like,
+  Comment,
+  Location,
   LessonProgress,
 };
