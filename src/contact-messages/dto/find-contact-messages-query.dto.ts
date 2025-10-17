@@ -2,7 +2,7 @@ import { IsInt, IsOptional, IsString, IsIn, Min, IsUUID } from "class-validator"
 import { Type } from "class-transformer";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 
-export class FindLikesQueryDto {
+export class FindContactMessagesQueryDto {
     @ApiPropertyOptional({ example: 1, description: "Número da página para paginação (valor padrão: 1)", minimum: 1 })
     @IsOptional()
     @Type(() => Number)
@@ -17,10 +17,10 @@ export class FindLikesQueryDto {
     @Min(1, { message: "O parâmetro limite deve ser no mínimo 1" })
     limit: number = 10;
 
-    @ApiPropertyOptional({ example: "e66a6ecf-e6c0-4df7-b2a2-58a029017529", description: "Filtra pelo ID do usuário (UUID v4)" })
+    @ApiPropertyOptional({ example: "azynn@hotmail.com", description: "Filtra pelo e-mail do usuário" })
     @IsOptional()
-    @IsUUID(4, { message: "O parâmetro usuário deve ser um tipo válido" })
-    userId?: string;
+    @IsUUID(4, { message: "O parâmetro e-mail deve ser um tipo válido" })
+    email?: string;
 
     @ApiPropertyOptional({ example: "createdAt", description: "Campo usado para ordenar os resultados (valor padrão: createdAt)" })
     @IsOptional()

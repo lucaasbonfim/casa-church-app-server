@@ -2,7 +2,7 @@ import { IsInt, IsOptional, IsString, IsIn, Min, IsUUID } from "class-validator"
 import { Type } from "class-transformer";
 import { ApiPropertyOptional } from "@nestjs/swagger";
 
-export class FindLikesQueryDto {
+export class FindDonationsQueryDto {
     @ApiPropertyOptional({ example: 1, description: "Número da página para paginação (valor padrão: 1)", minimum: 1 })
     @IsOptional()
     @Type(() => Number)

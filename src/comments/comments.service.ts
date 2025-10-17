@@ -31,7 +31,7 @@ export class CommentsService {
     return await this.commentsRepository.findAll(findCommentsQuery);
   }
 
-  async findOne(id: string, tokenPayload: TokenPayloadDto) {
+  async findOne(id: string) {
     const comment = await this.commentsRepository.findById(id);
     if (!comment) throw new NotFoundException(NOT_FOUND_COMMENT);
 

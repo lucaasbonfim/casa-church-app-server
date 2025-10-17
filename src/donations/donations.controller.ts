@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, Query } from '@nestjs/common';
 
 import { DonationsService } from './donations.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
@@ -8,6 +8,7 @@ import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { FindDonationsQueryDto } from './dto/find-donations-query.dto';
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
@@ -24,15 +25,8 @@ export class DonationsController {
   @ApiOperation({ summary: "Listar todas doações" })
   @Get()
   @UseInterceptors(CacheInterceptor)
-  findAll() {
-    return this.donationsService.findAll();
-  }
-
-  @ApiOperation({ summary: "Listar doações por usuário" })
-  @Get('user/:userId')
-  @UseInterceptors(CacheInterceptor)
-  findAllByUserId(@Param('userId') userId: string, @TokenPayloadParam() tokenPayload: TokenPayloadDto) {
-    return this.donationsService.findAllByUserId(userId, tokenPayload);
+  findAll(@Query() findDonationsQuery: FindDonationsQueryDto, @TokenPayloadParam() tokenPayload: TokenPayloadDto) {
+    return this.donationsService.findAll(findDonationsQuery, tokenPayload);
   }
 
   @ApiOperation({ summary: "Visualizar detalhes de uma doação" })

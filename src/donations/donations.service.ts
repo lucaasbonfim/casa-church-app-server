@@ -7,6 +7,7 @@ import { UpdateDonationDto } from './dto/update-donation.dto';
 import { DonationsRepository } from './donations.repository';
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { USER_ADMIN_ROLE } from "src/users/user.constants";
+import { FindDonationsQueryDto } from './dto/find-donations-query.dto';
 
 @Injectable()
 export class DonationsService {
@@ -27,22 +28,14 @@ export class DonationsService {
     };
   }
 
-  async findAll() {
-    return await this.donationsRepository.findAll();
-  }
-
-  async findAllByUserId(userId: string, tokenPayload: TokenPayloadDto) {
-    const donation = await this.donationsRepository.findByUserId(userId);
-    if (!donation) throw new NotFoundException(NOT_FOUND_DONATION);
-    
+  async findAll(findDonationsQuery: FindDonationsQueryDto, tokenPayload: TokenPayloadDto) {
     if (
-      tokenPayload.role !== USER_ADMIN_ROLE &&
-      userId !== tokenPayload.id
+      tokenPayload.role !== USER_ADMIN_ROLE
     ) {
       throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
 
-    return donation;
+    return await this.donationsRepository.findAll(findDonationsQuery);
   }
 
   async findOne(id: string, tokenPayload: TokenPayloadDto) {
@@ -50,8 +43,7 @@ export class DonationsService {
     if (!donation) throw new NotFoundException(NOT_FOUND_DONATION);
 
     if (
-      tokenPayload.role !== USER_ADMIN_ROLE &&
-      donation.userId !== tokenPayload.id
+      tokenPayload.role !== USER_ADMIN_ROLE
     ) {
       throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
@@ -64,8 +56,7 @@ export class DonationsService {
     if (!donation) throw new NotFoundException(NOT_FOUND_DONATION);
 
     if (
-      tokenPayload.role !== USER_ADMIN_ROLE &&
-      donation.userId !== tokenPayload.id
+      tokenPayload.role !== USER_ADMIN_ROLE
     ) {
       throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }
@@ -82,8 +73,7 @@ export class DonationsService {
     if (!donation) throw new NotFoundException(NOT_FOUND_DONATION);
 
     if (
-      tokenPayload.role !== USER_ADMIN_ROLE &&
-      donation.userId !== tokenPayload.id
+      tokenPayload.role !== USER_ADMIN_ROLE
     ) {
       throw new ForbiddenException(FORBIDDEN_OPERATION_MESSAGE);
     }

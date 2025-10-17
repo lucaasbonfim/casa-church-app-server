@@ -1,6 +1,7 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { Donation } from "src/models";
 import { CreateDonation, UpdateDonation } from "./types/donation.types";
+import { FindDonationsQueryDto } from "./dto/find-donations-query.dto";
 
 export class DonationsRepository {
     constructor(
@@ -14,18 +15,32 @@ export class DonationsRepository {
         return createdDonation;
     }
 
-    async findAll() {
-        return await this.donationModel.findAll();
+    async findAll(findDonationsQuery: FindDonationsQueryDto) {
+        const { page, limit, userId, orderBy, orderDirection } = findDonationsQuery;
+        const offset = (page - 1) * limit;
+
+        const where: any = {};
+        if (userId) where.userId = userId;
+        
+        const { rows, count } = await this.donationModel.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [[orderBy, orderDirection]],
+        });
+
+        return {
+        total: count,
+        page,
+        totalPages: Math.ceil(count / limit),
+        likes: rows,
+        };
     }
 
     async findById(id: string) {
         const donation = await this.donationModel.findByPk(id);
 
         return donation;
-    }
-
-    async findByUserId(userId: string) {
-        return await this.donationModel.findAll({ where: { userId } });
     }
 
     async update(id: string, data: UpdateDonation) {

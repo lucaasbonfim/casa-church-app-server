@@ -1,6 +1,7 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { ContactMessage } from "src/models";
 import { CreateContactMessage, UpdateContactMessage } from "./types/contact-message.types";
+import { FindContactMessagesQueryDto } from "./dto/find-contact-messages-query.dto";
 
 export class ContactMessagesRepository {
     constructor(
@@ -14,8 +15,26 @@ export class ContactMessagesRepository {
         return createdContactMessage;
     }
 
-    async findAll() {
-        return await this.contactMessageModel.findAll();
+    async findAll(findContactMessagesQuery: FindContactMessagesQueryDto) {
+        const { page, limit, email, orderBy, orderDirection } = findContactMessagesQuery;
+        const offset = (page - 1) * limit;
+
+        const where: any = {};
+        if (email) where.email = email;
+        
+        const { rows, count } = await this.contactMessageModel.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [[orderBy, orderDirection]],
+        });
+
+        return {
+        total: count,
+        page,
+        totalPages: Math.ceil(count / limit),
+        likes: rows,
+        };
     }
 
     async findById(id: string) {

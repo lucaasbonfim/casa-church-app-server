@@ -29,8 +29,8 @@ constructor(private readonly commentsService: CommentsService) {}
 
   @ApiOperation({ summary: "Visualizar detalhes de um comentário" })
   @Get(':id')
-  findOne(@Param('id') id: string, @TokenPayloadParam() tokenPayload: TokenPayloadDto) {
-    return this.commentsService.findOne(id, tokenPayload);
+  findOne(@Param('id') id: string) {
+    return this.commentsService.findOne(id);
   }
 
   @ApiOperation({ summary: "Atualizar um comentário" })
