@@ -9,6 +9,7 @@ import { SermonsModule } from "src/sermons/sermons.module";
 import { LessonsModule } from "src/lessons/lessons.module";
 import { ContactMessagesModule } from "src/contact-messages/contact-messages.module";
 import { DonationsModule } from "src/donations/donations.module";
+import { CommentsModule } from "src/comments/comments.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DonationsModule } from "src/donations/donations.module";
     SermonsModule,
     ContactMessagesModule,
     DonationsModule,
+    CommentsModule,
   ],
 })
 export class AppModule {}

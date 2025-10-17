@@ -20,4 +20,4 @@ export const models = [
   Comment
 ];
 
-export { User, Event, Registration, Post, Sermon, ContactMessage, Donation,  Comment};
+export { User, Event, Registration, Post, Sermon, Lesson, ContactMessage, Donation, Comment};

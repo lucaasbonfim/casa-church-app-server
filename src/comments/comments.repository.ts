@@ -1,6 +1,7 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { Comment } from "src/models";
 import { CreateComment, UpdateComment } from "./types/comment.types";
+import { FindCommentsQueryDto } from "./dto/find-comments-query.dto";
 
 export class CommentsRepository {
     constructor(
@@ -14,18 +15,31 @@ export class CommentsRepository {
         return createdComment;
     }
 
-    async findAll() {
-        return await this.commentModel.findAll();
+    async findAll(findCommentsQuery: FindCommentsQueryDto) {
+        const { page, limit, userId, orderBy, orderDirection } = findCommentsQuery;
+        const offset = (page - 1) * limit;
+
+        const where: any = {};
+        if (userId) where.userId = userId;
+        const { rows, count } = await this.commentModel.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [[orderBy, orderDirection]],
+        });
+
+        return {
+        total: count,
+        page,
+        totalPages: Math.ceil(count / limit),
+        posts: rows,
+        };
     }
 
     async findById(id: string) {
         const comment = await this.commentModel.findByPk(id);
 
         return comment;
-    }
-
-    async findByUserId(userId: string) {
-        return await this.commentModel.findAll({ where: { userId } });
     }
 
     async update(id: string, data: UpdateComment) {

@@ -6,7 +6,7 @@ import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CommentsRepository } from './comments.repository';
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
-import { USER_ADMIN_ROLE } from "src/users/user.constants";
+import { FindCommentsQueryDto } from "./dto/find-comments-query.dto";
 
 @Injectable()
 export class CommentsService {
@@ -27,15 +27,8 @@ export class CommentsService {
     };
   }
 
-  async findAll() {
-    return await this.commentsRepository.findAll();
-  }
-
-  async findAllByUserId(userId: string, tokenPayload: TokenPayloadDto) {
-    const comment = await this.commentsRepository.findByUserId(userId);
-    if (!comment) throw new NotFoundException(NOT_FOUND_COMMENT);
-
-    return comment;
+  async findAll(findCommentsQuery: FindCommentsQueryDto) {
+    return await this.commentsRepository.findAll(findCommentsQuery);
   }
 
   async findOne(id: string, tokenPayload: TokenPayloadDto) {
