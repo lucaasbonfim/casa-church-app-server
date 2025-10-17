@@ -7,7 +7,7 @@ import {
   UpdatedAt,
 } from "sequelize-typescript";
 import { Table, Column, Model } from "sequelize-typescript";
-import { User } from "src/models";
+import { User, Location } from "src/models";
 
 @Table({ tableName: "events", schema: "casa-church", timestamps: true })
 export class Event extends Model {
@@ -37,4 +37,8 @@ export class Event extends Model {
 
   @UpdatedAt
   declare updatedAt: Date;
+
+  @ForeignKey(() => Location)
+  @Column({ type: DataType.UUID })
+  declare locationId: string;
 }

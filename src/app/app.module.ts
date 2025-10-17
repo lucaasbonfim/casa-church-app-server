@@ -12,6 +12,7 @@ import { ContactMessagesModule } from "src/contact-messages/contact-messages.mod
 import { DonationsModule } from "src/donations/donations.module";
 import { CommentsModule } from "src/comments/comments.module";
 import { LikesModule } from "src/likes/likes.module";
+import { LocationsModule } from "src/locations/locations.module";
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { LikesModule } from "src/likes/likes.module";
     ContactMessagesModule,
     DonationsModule,
     CommentsModule,
-    LikesModule
+    LikesModule,
+    LocationsModule
   ],
 })
 export class AppModule {}

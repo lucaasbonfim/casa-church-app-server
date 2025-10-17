@@ -8,6 +8,7 @@ import { ContactMessage } from "src/contact-messages/entities/contact-message.mo
 import { Donation } from "src/donations/entities/donation.model";
 import { Comment } from "src/comments/entities/comment.model";
 import { Like } from "src/likes/entities/like.model";
+import { Location } from "src/locations/entities/location.entity";
 
 export const models = [
   User,
@@ -19,7 +20,8 @@ export const models = [
   ContactMessage,
   Donation,
   Like,
-  Comment
+  Comment, 
+  Location
 ];
 
-export { User, Event, Registration, Post, Sermon, Lesson, ContactMessage, Donation, Like, Comment };
+export { User, Event, Registration, Post, Sermon, Lesson, ContactMessage, Donation, Like, Comment, Location };
