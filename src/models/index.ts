@@ -8,7 +8,7 @@ import { ContactMessage } from "src/contact-messages/entities/contact-message.mo
 import { Donation } from "src/donations/entities/donation.model";
 import { Comment } from "src/comments/entities/comment.model";
 import { Like } from "src/likes/entities/like.model";
-import { Location } from "src/locations/entities/location.entity";
+import { Location } from "src/locations/entities/location.model";
 import { LessonProgress } from "src/lesson-progress/entities/lesson-progress.model";
 
 export const models = [
