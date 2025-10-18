@@ -10,6 +10,7 @@ import { Comment } from "src/comments/entities/comment.model";
 import { Like } from "src/likes/entities/like.model";
 import { Location } from "src/locations/entities/location.model";
 import { LessonProgress } from "src/lesson-progress/entities/lesson-progress.model";
+import { EventFeedback } from "src/event-feedbacks/entities/event-feedback.model";
 
 export const models = [
   User,
@@ -20,10 +21,11 @@ export const models = [
   Lesson,
   ContactMessage,
   Donation,
-  LessonProgress,
   Like,
   Comment,
   Location,
+  LessonProgress,
+  EventFeedback,
 ];
 
 export {
@@ -39,4 +41,5 @@ export {
   Comment,
   Location,
   LessonProgress,
+  EventFeedback,
 };

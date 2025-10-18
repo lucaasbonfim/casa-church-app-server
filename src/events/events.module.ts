@@ -10,5 +10,6 @@ import { models } from "src/models";
   imports: [SequelizeModule.forFeature(models), AuthModule],
   controllers: [EventsController],
   providers: [EventsService, EventsRepository],
+  exports: [EventsRepository],
 })
 export class EventsModule {}

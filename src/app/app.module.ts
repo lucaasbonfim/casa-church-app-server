@@ -14,6 +14,7 @@ import { CommentsModule } from "src/comments/comments.module";
 import { LikesModule } from "src/likes/likes.module";
 import { LocationsModule } from "src/locations/locations.module";
 import { LessonProgressModule } from "src/lesson-progress/lesson-progress.module";
+import { EventFeedbacksModule } from "src/event-feedbacks/event-feedbacks.module";
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { LessonProgressModule } from "src/lesson-progress/lesson-progress.module
     DonationsModule,
     CommentsModule,
     LikesModule,
-    LocationsModule
+    LocationsModule,
+    EventFeedbacksModule
   ],
 })
 export class AppModule {}
