@@ -47,7 +47,7 @@ $ npm run start:prod
 ## ⚡ Tecnologias Utilizadas
 
 - Backend: NestJS, Node.js, TypeScript
-- Banco de Dados: PostgreSQL / Sequelize (ou outro ORM de sua escolha)
+- Banco de Dados: PostgreSQL / Sequelize
 - Validação e Documentação: class-validator, class-transformer, Swagger
 
 ## 📚 Detalhes do Sistema
