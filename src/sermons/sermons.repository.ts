@@ -15,10 +15,14 @@ export class SermonsRepository {
   }
 
   async findAll(findSermonQuery: FindSermonQueryDto) {
-    const { page, limit, orderBy, orderDirection } = findSermonQuery;
+    const { page, limit, userId, orderBy, orderDirection } = findSermonQuery;
     const offset = (page - 1) * limit;
 
+    const where: any = {};
+    if (userId) where.createdBy = userId;
+
     const { rows, count } = await this.sermonModel.findAndCountAll({
+      where,
       limit,
       offset,
       order: [[orderBy, orderDirection]],
