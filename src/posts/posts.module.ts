@@ -10,5 +10,6 @@ import { PostsRepository } from "./posts.repository";
   imports: [SequelizeModule.forFeature(models), AuthModule],
   controllers: [PostsController],
   providers: [PostsService, PostsRepository],
+  exports: [PostsRepository],
 })
 export class PostsModule {}
