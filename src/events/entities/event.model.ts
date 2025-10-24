@@ -1,4 +1,5 @@
 import {
+  BelongsTo,
   CreatedAt,
   DataType,
   Default,
@@ -41,4 +42,7 @@ export class Event extends Model {
   @ForeignKey(() => Location)
   @Column({ type: DataType.UUID })
   declare locationId: string;
+
+  @BelongsTo(() => Location)
+  declare location: Location;
 }
