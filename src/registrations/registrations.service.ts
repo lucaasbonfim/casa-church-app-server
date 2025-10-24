@@ -15,6 +15,8 @@ import {
   CANCEL_REGISTRATION_MESSAGE,
   CREATE_REGISTRATION_CONFLICT_MESSAGE,
   CREATED_REGISTRATION_MESSAGE,
+  EVENT_FULL_MESSAGE,
+  EVENT_OR_LOCATION_NOT_FOUND_MESSAGE,
   NOT_FOUND_REGISTRATION_MESSAGE,
   UPDATED_REGISTRATION_MESSAGE,
 } from "./registrations.constants";
@@ -42,6 +44,22 @@ export class RegistrationsService {
     );
     if (existing)
       throw new ConflictException(CREATE_REGISTRATION_CONFLICT_MESSAGE);
+
+    const event = await this.registrationRepository.findEventWithLocation(
+      createRegistrationDto.eventId
+    );
+
+    if (!event || !event.locationId) {
+      throw new NotFoundException(EVENT_OR_LOCATION_NOT_FOUND_MESSAGE);
+    }
+
+    const currentCount = await this.registrationRepository.countActiveByEvent(
+      createRegistrationDto.eventId
+    );
+
+    if (currentCount >= event.location.capacity) {
+      throw new ConflictException(EVENT_FULL_MESSAGE);
+    }
 
     const createdRegistration = await this.registrationRepository.create(
       createRegistrationDto
