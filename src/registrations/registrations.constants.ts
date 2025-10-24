@@ -8,3 +8,6 @@ export const CANCEL_REGISTRATION_MESSAGE = "Inscrição cancelada com sucesso.";
 export const CREATE_REGISTRATION_CONFLICT_MESSAGE =
   "Este usuário já possui inscrição neste evento.";
 export const NOT_FOUND_REGISTRATION_MESSAGE = "Inscrição não encontrada.";
+export const EVENT_FULL_MESSAGE = "Evento lotado. Não é possível se inscrever.";
+export const EVENT_OR_LOCATION_NOT_FOUND_MESSAGE =
+  "Evento ou local não encontrado.";
