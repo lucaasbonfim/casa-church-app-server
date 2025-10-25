@@ -1,7 +1,9 @@
 import { Module } from "@nestjs/common";
-import { AuthModule } from "src/auth/auth.module";
+import { APP_INTERCEPTOR } from "@nestjs/core";
+
 import { DatabaseModule } from "src/config/database.module";
 import { DataCacheModule } from "src/config/data-cache.module";
+import { AuthModule } from "src/auth/auth.module";
 import { UsersModule } from "src/users/users.module";
 import { EventsModule } from "src/events/events.module";
 import { RegistrationsModule } from "src/registrations/registrations.module";
@@ -15,6 +17,7 @@ import { LikesModule } from "src/likes/likes.module";
 import { LocationsModule } from "src/locations/locations.module";
 import { LessonProgressModule } from "src/lesson-progress/lesson-progress.module";
 import { EventFeedbacksModule } from "src/event-feedbacks/event-feedbacks.module";
+import { UserActivityModule } from "src/user-activity/user-activity.module";
 
 @Module({
   imports: [
@@ -33,7 +36,8 @@ import { EventFeedbacksModule } from "src/event-feedbacks/event-feedbacks.module
     CommentsModule,
     LikesModule,
     LocationsModule,
-    EventFeedbacksModule
+    EventFeedbacksModule,
+    UserActivityModule,
   ],
 })
 export class AppModule {}
