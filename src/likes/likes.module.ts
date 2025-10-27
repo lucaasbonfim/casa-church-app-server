@@ -7,6 +7,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { LikesRepository } from "./likes.repository";
 import { PostsModule } from "src/posts/posts.module";
 import { UsersModule } from "src/users/users.module";
+import { UserActivityModule } from "src/user-activity/user-activity.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from "src/users/users.module";
     AuthModule,
     PostsModule,
     UsersModule,
+    UserActivityModule,
   ],
   controllers: [LikesController],
   providers: [LikesService, LikesRepository],

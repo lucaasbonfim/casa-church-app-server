@@ -19,9 +19,11 @@ import { FindPostsQueryDto } from "./dto/find-posts-query.dto";
 
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("posts")
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}

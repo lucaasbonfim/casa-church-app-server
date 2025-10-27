@@ -19,9 +19,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { FindLessonQueryDto } from "./dto/find-lesson-query.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("lessons")
 export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}

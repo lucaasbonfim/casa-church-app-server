@@ -20,9 +20,11 @@ import { CacheInterceptor } from "@nestjs/cache-manager";
 import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { FindContactMessagesQueryDto } from "./dto/find-contact-messages-query.dto";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("contact-messages")
 export class ContactMessagesController {
   constructor(

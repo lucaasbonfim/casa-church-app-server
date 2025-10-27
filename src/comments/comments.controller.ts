@@ -18,9 +18,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { FindCommentsQueryDto } from "./dto/find-comments-query.dto";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("comments")
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}

@@ -17,9 +17,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import { FindEventFeedbacksQueryDto } from "./dto/find-event-feedbacks-query.dto";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("event-feedbacks")
 export class EventFeedbacksController {
   constructor(private readonly eventFeedbacksService: EventFeedbacksService) {}

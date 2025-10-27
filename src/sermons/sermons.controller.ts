@@ -19,9 +19,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import { FindSermonQueryDto } from "./dto/find-sermon-query.dto";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("sermons")
 export class SermonsController {
   constructor(private readonly sermonsService: SermonsService) {}

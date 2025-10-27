@@ -7,9 +7,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { FindLikesQueryDto } from "src/likes/dto/find-likes-query.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller('likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}

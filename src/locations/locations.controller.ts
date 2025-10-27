@@ -19,9 +19,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import { FindLocationsQueryDto } from "./dto/find-locations-query.dto";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("locations")
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}

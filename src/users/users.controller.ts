@@ -19,9 +19,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { ApiSecurity, ApiOperation } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("users")
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

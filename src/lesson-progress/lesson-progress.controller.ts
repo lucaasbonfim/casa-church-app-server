@@ -19,8 +19,10 @@ import { TokenPayloadParam } from "src/auth/params/token-payload.param";
 import { FindLessonProgressDto } from "./dto/find-lesson-progress-query.dto";
 import { ApiOperation } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("lesson-progress")
 export class LessonProgressController {
   constructor(private readonly lessonProgressService: LessonProgressService) {}
@@ -57,6 +59,7 @@ export class LessonProgressController {
     @Body() updateLessonProgressDto: UpdateLessonProgressDto,
     @TokenPayloadParam() tokenPayLoad: TokenPayloadDto
   ) {
+    console.log(lessonId);
     return this.lessonProgressService.update(
       lessonId,
       updateLessonProgressDto,

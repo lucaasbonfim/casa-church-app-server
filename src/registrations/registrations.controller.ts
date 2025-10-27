@@ -19,9 +19,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { FindRegistrationsQueryDto } from "./dto/find-registrations-query.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller("registrations")
 export class RegistrationsController {
   constructor(private readonly registrationsService: RegistrationsService) {}

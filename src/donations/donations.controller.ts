@@ -9,9 +9,11 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { FindDonationsQueryDto } from './dto/find-donations-query.dto';
+import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
 @ApiSecurity("auth-token")
 @UseGuards(AuthTokenGuard)
+@UseInterceptors(UserActivityInterceptor)
 @Controller('donations')
 export class DonationsController {
   constructor(private readonly donationsService: DonationsService) {}
