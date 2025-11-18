@@ -1,0 +1,54 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateContactMessageDto = void 0;
+const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
+class CreateContactMessageDto {
+    name;
+    email;
+    subject;
+    message;
+}
+exports.CreateContactMessageDto = CreateContactMessageDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: "Hugo",
+        description: "Nome da pessoa que está criando a mensagem",
+    }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'O campo nome não pode ser vazio.' }),
+    (0, class_validator_1.IsString)({ message: 'O campo nome não é um válido' }),
+    (0, class_validator_1.MaxLength)(100, { message: 'O nome deve ter o tamanho máximo de 100 caracteres' })
+], CreateContactMessageDto.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: "azynn@hotmail.com",
+        description: "Email da pessoa que está criando a mensagem",
+    }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'O campo email não pode ser vazio.' }),
+    (0, class_validator_1.IsEmail)({}, { message: 'O campo email não é um válido' }),
+    (0, class_validator_1.MaxLength)(100, { message: 'O email deve ter o tamanho máximo de 100 caracteres' })
+], CreateContactMessageDto.prototype, "email", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: "Bom dia!",
+        description: "Assunto da mensagem",
+    }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'O campo assunto não pode ser vazio.' }),
+    (0, class_validator_1.IsString)({ message: 'O campo assunto não é um válido' }),
+    (0, class_validator_1.MaxLength)(150, { message: 'O assunto deve ter o tamanho máximo de 150 caracteres' })
+], CreateContactMessageDto.prototype, "subject", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: "Que dia lindo para estar na casa do Senhor!",
+        description: "Conteúdo da mensagem",
+    }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'O campo mensagem não pode ser vazio.' }),
+    (0, class_validator_1.IsString)({ message: 'O campo mensagem não é um válido' }),
+    (0, class_validator_1.MaxLength)(1000, { message: 'A mensagem deve ter o tamanho máximo de 1000 caracteres' })
+], CreateContactMessageDto.prototype, "message", void 0);
