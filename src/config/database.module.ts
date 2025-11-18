@@ -11,10 +11,14 @@ import { models } from "src/models";
       username: process.env.PGUSER,
       password: process.env.PGPASSWORD,
       database: process.env.PGDATABASE,
+
+      // 🚀 MODELOS EXPLÍCITOS (melhor desempenho)
       models: models,
-      autoLoadModels: true,
-      synchronize: true,
+      autoLoadModels: false,   // ❗ IMPORTANTE
+      synchronize: false,      // ❗ IMPORTANTE
+
       logging: false,
+
       dialectOptions:
         process.env.PGSSLMODE === "require"
           ? { ssl: { require: true, rejectUnauthorized: false } }
