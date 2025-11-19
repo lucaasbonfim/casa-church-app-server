@@ -6,3 +6,4 @@ const create_user_activity_dto_1 = require("./create-user-activity.dto");
 class UpdateUserActivityDto extends (0, swagger_1.PartialType)(create_user_activity_dto_1.CreateUserActivityDto) {
 }
 exports.UpdateUserActivityDto = UpdateUserActivityDto;
+//# sourceMappingURL=update-user-activity.dto.js.map

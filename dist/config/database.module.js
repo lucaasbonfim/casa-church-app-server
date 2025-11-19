@@ -24,8 +24,8 @@ exports.DatabaseModule = DatabaseModule = __decorate([
                 password: process.env.PGPASSWORD,
                 database: process.env.PGDATABASE,
                 models: models_1.models,
-                autoLoadModels: false,
-                synchronize: false,
+                autoLoadModels: true,
+                synchronize: true,
                 logging: false,
                 dialectOptions: process.env.PGSSLMODE === "require"
                     ? { ssl: { require: true, rejectUnauthorized: false } }
@@ -35,3 +35,4 @@ exports.DatabaseModule = DatabaseModule = __decorate([
         exports: [sequelize_1.SequelizeModule],
     })
 ], DatabaseModule);
+//# sourceMappingURL=database.module.js.map

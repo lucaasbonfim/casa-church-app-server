@@ -33,3 +33,4 @@ exports.LikesModule = LikesModule = __decorate([
         providers: [likes_service_1.LikesService, likes_repository_1.LikesRepository],
     })
 ], LikesModule);
+//# sourceMappingURL=likes.module.js.map

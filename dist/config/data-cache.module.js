@@ -24,3 +24,4 @@ exports.DataCacheModule = DataCacheModule = __decorate([
         exports: [cache_manager_1.CacheModule],
     })
 ], DataCacheModule);
+//# sourceMappingURL=data-cache.module.js.map

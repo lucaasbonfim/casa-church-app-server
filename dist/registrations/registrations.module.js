@@ -32,3 +32,4 @@ exports.RegistrationsModule = RegistrationsModule = __decorate([
         providers: [registrations_service_1.RegistrationsService, registrations_repository_1.RegistrationsRepotisory, auto_cancel_task_1.AutoCancelTask],
     })
 ], RegistrationsModule);
+//# sourceMappingURL=registrations.module.js.map

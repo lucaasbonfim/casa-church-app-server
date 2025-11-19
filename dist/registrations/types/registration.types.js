@@ -7,3 +7,4 @@ var RegistrationStatus;
     RegistrationStatus["PENDING"] = "pending";
     RegistrationStatus["CANCELED"] = "canceled";
 })(RegistrationStatus || (exports.RegistrationStatus = RegistrationStatus = {}));
+//# sourceMappingURL=registration.types.js.map

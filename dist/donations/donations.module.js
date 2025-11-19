@@ -25,3 +25,4 @@ exports.DonationsModule = DonationsModule = __decorate([
         providers: [donations_service_1.DonationsService, donations_repository_1.DonationsRepository],
     })
 ], DonationsModule);
+//# sourceMappingURL=donations.module.js.map

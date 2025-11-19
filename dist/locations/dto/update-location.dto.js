@@ -6,3 +6,4 @@ const create_location_dto_1 = require("./create-location.dto");
 class UpdateLocationDto extends (0, swagger_1.PartialType)(create_location_dto_1.CreateLocationDto) {
 }
 exports.UpdateLocationDto = UpdateLocationDto;
+//# sourceMappingURL=update-location.dto.js.map

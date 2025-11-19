@@ -25,3 +25,4 @@ exports.LessonsModule = LessonsModule = __decorate([
         providers: [lessons_service_1.LessonsService, lessons_repository_1.LessonsRepository],
     })
 ], LessonsModule);
+//# sourceMappingURL=lessons.module.js.map

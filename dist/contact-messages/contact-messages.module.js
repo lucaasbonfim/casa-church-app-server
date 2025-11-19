@@ -25,3 +25,4 @@ exports.ContactMessagesModule = ContactMessagesModule = __decorate([
         providers: [contact_messages_service_1.ContactMessagesService, contact_messages_repository_1.ContactMessagesRepository],
     })
 ], ContactMessagesModule);
+//# sourceMappingURL=contact-messages.module.js.map

@@ -8,3 +8,4 @@ exports.CREATE_REGISTRATION_CONFLICT_MESSAGE = "Este usuário já possui inscri�
 exports.NOT_FOUND_REGISTRATION_MESSAGE = "Inscrição não encontrada.";
 exports.EVENT_FULL_MESSAGE = "Evento lotado. Não é possível se inscrever.";
 exports.EVENT_OR_LOCATION_NOT_FOUND_MESSAGE = "Evento ou local não encontrado.";
+//# sourceMappingURL=registrations.constants.js.map

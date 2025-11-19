@@ -25,3 +25,4 @@ exports.SermonsModule = SermonsModule = __decorate([
         providers: [sermons_service_1.SermonsService, sermons_repository_1.SermonsRepository],
     })
 ], SermonsModule);
+//# sourceMappingURL=sermons.module.js.map

@@ -5,6 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateEventDto = void 0;
 const class_transformer_1 = require("class-transformer");
@@ -28,7 +31,8 @@ __decorate([
     (0, class_validator_1.IsString)({ message: "O campo título do evento não é um válido" }),
     (0, class_validator_1.MaxLength)(255, {
         message: "O título do evento deve ter o tamanho máximo de 255 caracteres",
-    })
+    }),
+    __metadata("design:type", String)
 ], CreateEventDto.prototype, "title", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -40,7 +44,8 @@ __decorate([
     (0, class_validator_1.IsString)({ message: "O campo descrição do evento não é um válido" }),
     (0, class_validator_1.MaxLength)(500, {
         message: "A descrição do evento deve ter o tamanho máximo de 500 caracteres",
-    })
+    }),
+    __metadata("design:type", String)
 ], CreateEventDto.prototype, "description", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -51,7 +56,8 @@ __decorate([
     }),
     (0, class_validator_1.IsNotEmpty)({ message: "O campo data de início não pode ser vazio." }),
     (0, class_validator_1.IsDate)({ message: 'O campo data de início deve ser do tipo "data"' }),
-    (0, class_transformer_1.Type)(() => Date)
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
 ], CreateEventDto.prototype, "startDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -62,7 +68,8 @@ __decorate([
     }),
     (0, class_validator_1.IsNotEmpty)({ message: "O campo data de término não pode ser vazio." }),
     (0, class_validator_1.IsDate)({ message: 'O campo data de término deve ser do tipo "data"' }),
-    (0, class_transformer_1.Type)(() => Date)
+    (0, class_transformer_1.Type)(() => Date),
+    __metadata("design:type", Date)
 ], CreateEventDto.prototype, "endDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
@@ -70,5 +77,7 @@ __decorate([
         description: "ID do local onde o evento será realizado",
     }),
     (0, class_validator_1.IsNotEmpty)({ message: "O campo local do evento não pode ser vazio." }),
-    (0, class_validator_1.IsUUID)("4", { message: "O campo local do evento deve ser um UUID válido." })
+    (0, class_validator_1.IsUUID)("4", { message: "O campo local do evento deve ser um UUID válido." }),
+    __metadata("design:type", String)
 ], CreateEventDto.prototype, "locationId", void 0);
+//# sourceMappingURL=create-event.dto.js.map

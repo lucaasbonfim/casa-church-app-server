@@ -8,3 +8,4 @@ exports.TokenPayloadParam = (0, common_1.createParamDecorator)((data, ctx) => {
     const request = context.getRequest();
     return request[auth_constants_1.REQUEST_TOKEN_PAYLOAD];
 });
+//# sourceMappingURL=token-payload.param.js.map

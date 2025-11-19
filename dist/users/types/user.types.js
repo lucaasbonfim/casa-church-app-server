@@ -6,3 +6,4 @@ var UserRoles;
     UserRoles["USER"] = "user";
     UserRoles["ADMIN"] = "admin";
 })(UserRoles || (exports.UserRoles = UserRoles = {}));
+//# sourceMappingURL=user.types.js.map

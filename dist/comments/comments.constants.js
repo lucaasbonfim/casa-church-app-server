@@ -5,3 +5,4 @@ exports.CREATED_COMMENT = "Comentário publicado com sucesso.";
 exports.UPDATED_COMMENT = "Comentário atualizado com sucesso.";
 exports.DELETED_COMMENT = "Comentário excluído com sucesso.";
 exports.NOT_FOUND_COMMENT = "Comentário não encontrado.";
+//# sourceMappingURL=comments.constants.js.map

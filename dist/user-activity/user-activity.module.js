@@ -32,3 +32,4 @@ exports.UserActivityModule = UserActivityModule = __decorate([
         exports: [user_activity_service_1.UserActivityService],
     })
 ], UserActivityModule);
+//# sourceMappingURL=user-activity.module.js.map

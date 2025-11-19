@@ -42,3 +42,4 @@ exports.models = [
     lesson_progress_model_1.LessonProgress,
     event_feedback_model_1.EventFeedback,
 ];
+//# sourceMappingURL=index.js.map

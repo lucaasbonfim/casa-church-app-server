@@ -31,3 +31,4 @@ exports.EventFeedbacksModule = EventFeedbacksModule = __decorate([
         providers: [event_feedbacks_service_1.EventFeedbacksService, event_feedbacks_repository_1.EventFeedbacksRepository],
     })
 ], EventFeedbacksModule);
+//# sourceMappingURL=event-feedbacks.module.js.map

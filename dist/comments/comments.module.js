@@ -33,3 +33,4 @@ exports.CommentsModule = CommentsModule = __decorate([
         providers: [comments_service_1.CommentsService, comments_repository_1.CommentsRepository],
     })
 ], CommentsModule);
+//# sourceMappingURL=comments.module.js.map

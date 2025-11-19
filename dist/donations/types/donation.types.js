@@ -13,3 +13,4 @@ var Status;
     Status["NEGADO"] = "Negado";
     Status["EM_PROCESSAMENTO"] = "Em Processamento";
 })(Status || (exports.Status = Status = {}));
+//# sourceMappingURL=donation.types.js.map

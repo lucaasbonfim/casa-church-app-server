@@ -25,3 +25,4 @@ exports.LessonProgressModule = LessonProgressModule = __decorate([
         providers: [lesson_progress_service_1.LessonProgressService, lesson_progress_repository_1.LessonProgressRepository],
     })
 ], LessonProgressModule);
+//# sourceMappingURL=lesson-progress.module.js.map

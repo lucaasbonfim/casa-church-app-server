@@ -25,3 +25,4 @@ exports.LocationsModule = LocationsModule = __decorate([
         providers: [locations_service_1.LocationsService, locations_repository_1.LocationsRepository],
     })
 ], LocationsModule);
+//# sourceMappingURL=locations.module.js.map
