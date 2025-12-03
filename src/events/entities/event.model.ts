@@ -45,4 +45,7 @@ export class Event extends Model {
 
   @BelongsTo(() => Location)
   declare location: Location;
+
+  @Column({ type: DataType.TEXT, allowNull: true })
+  declare image: string;
 }
