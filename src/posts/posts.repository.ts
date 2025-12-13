@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/sequelize";
-import { Post } from "src/models";
+import { Post, User } from "src/models";
 import { CreatePost } from "./types/post.types";
 import { FindPostsQueryDto } from "./dto/find-posts-query.dto";
 
@@ -47,5 +47,14 @@ export class PostsRepository {
     await post!.destroy();
 
     return;
+  }
+
+  async findUsersByIds(userIds: string[]) {
+    return User.findAll({
+      where: {
+        id: userIds,
+      },
+      attributes: ["id", "name"],
+    });
   }
 }

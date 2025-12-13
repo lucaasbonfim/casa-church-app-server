@@ -31,9 +31,27 @@ export class PostsService {
   }
 
   async findAll(findPostsQuery: FindPostsQueryDto) {
-    const posts = await this.postsRepository.findAll(findPostsQuery);
+    const result = await this.postsRepository.findAll(findPostsQuery);
 
-    return posts;
+    // pega todos os userIds únicos
+    const userIds = [...new Set(result.posts.map((post) => post.userId))];
+
+    // busca usuários
+    const users = await this.postsRepository.findUsersByIds(userIds);
+
+    // cria mapa id -> user
+    const usersMap = new Map(users.map((user) => [user.id, user]));
+
+    // anexa usuário em cada post
+    const postsWithUser = result.posts.map((post) => ({
+      ...post.toJSON(),
+      user: usersMap.get(post.userId) || null,
+    }));
+
+    return {
+      ...result,
+      posts: postsWithUser,
+    };
   }
 
   async findOne(id: string) {
