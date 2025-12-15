@@ -1,5 +1,5 @@
 import { InjectModel } from "@nestjs/sequelize";
-import { Comment } from "src/models";
+import { Comment, User } from "src/models";
 import { CreateComment } from "./types/comment.types";
 import { FindCommentsQueryDto } from "./dto/find-comments-query.dto";
 
@@ -47,5 +47,14 @@ export class CommentsRepository {
     await comment!.destroy();
 
     return;
+  }
+
+  async findUsersByIds(userIds: string[]) {
+    return User.findAll({
+      where: {
+        id: userIds,
+      },
+      attributes: ["id", "name"],
+    });
   }
 }

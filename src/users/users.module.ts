@@ -15,6 +15,6 @@ import { UserActivityModule } from "src/user-activity/user-activity.module";
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],
-  exports: [UsersRepository],
+  exports: [UsersRepository, UsersService],
 })
 export class UsersModule {}
