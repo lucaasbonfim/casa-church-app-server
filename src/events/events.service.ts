@@ -59,7 +59,16 @@ export class EventsService {
     const event = await this.eventsRepository.findById(id);
     if (!event) throw new NotFoundException(NOT_FOUND_EVENT_MESSAGE);
 
+    console.log("=== UPDATE EVENT ===");
+    console.log("ID:", id);
+    console.log("Dados recebidos:", updateEventDto);
+    console.log("Evento antes:", event.toJSON());
+
     const updatedEvent = await this.eventsRepository.update(id, updateEventDto);
+
+    console.log("Evento depois:", updatedEvent.toJSON());
+    console.log("===================");
+
     return {
       message: UPDATED_EVENT_MESSAGE,
       event: updatedEvent,

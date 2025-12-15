@@ -9,5 +9,7 @@ export declare class AuthService {
     constructor(usersRepository: UsersRepository, hashService: HashService, jwtService: JwtService);
     login(loginDto: LoginDto): Promise<{
         token: string;
+        name: string;
+        email: string;
     }>;
 }

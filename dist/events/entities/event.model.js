@@ -60,6 +60,10 @@ __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => models_1.Location),
     __metadata("design:type", models_1.Location)
 ], Event.prototype, "location", void 0);
+__decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_1.DataType.TEXT, allowNull: true }),
+    __metadata("design:type", String)
+], Event.prototype, "image", void 0);
 exports.Event = Event = __decorate([
     (0, sequelize_typescript_2.Table)({ tableName: "events", schema: "casa-church", timestamps: true })
 ], Event);

@@ -5,6 +5,7 @@ import {
   IsDate,
   MaxLength,
   IsUUID,
+  IsOptional,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -63,4 +64,13 @@ export class CreateEventDto {
   @IsNotEmpty({ message: "O campo local do evento não pode ser vazio." })
   @IsUUID("4", { message: "O campo local do evento deve ser um UUID válido." })
   locationId: string;
+
+  @ApiProperty({
+    example: "https://images.unsplash.com/photo-1234567890",
+    description: "URL da imagem do evento",
+    required: false,
+  })
+  @IsOptional()
+  @IsString({ message: "O campo imagem deve ser uma string válida" })
+  image?: string;
 }

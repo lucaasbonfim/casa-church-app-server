@@ -22,7 +22,6 @@ const common_2 = require("@nestjs/common");
 const token_payload_param_1 = require("../auth/params/token-payload.param");
 const token_payload_dto_1 = require("../auth/dto/token-payload.dto");
 const swagger_1 = require("@nestjs/swagger");
-const cache_manager_1 = require("@nestjs/cache-manager");
 const find_sermon_query_dto_1 = require("./dto/find-sermon-query.dto");
 const user_activity_interceptor_1 = require("../common/interceptors/user-activity.interceptor");
 let SermonsController = class SermonsController {
@@ -60,7 +59,6 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Listar todos os sermões" }),
     (0, common_1.Get)(),
-    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [find_sermon_query_dto_1.FindSermonQueryDto]),
@@ -69,7 +67,6 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Listar detalhes de um sermão específico" }),
     (0, common_1.Get)(":id"),
-    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

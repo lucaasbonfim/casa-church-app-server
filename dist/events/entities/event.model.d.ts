@@ -11,4 +11,5 @@ export declare class Event extends Model {
     updatedAt: Date;
     locationId: string;
     location: Location;
+    image: string;
 }

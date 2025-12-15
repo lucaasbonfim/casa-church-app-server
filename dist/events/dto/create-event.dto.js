@@ -19,6 +19,7 @@ class CreateEventDto {
     startDate;
     endDate;
     locationId;
+    image;
 }
 exports.CreateEventDto = CreateEventDto;
 __decorate([
@@ -80,4 +81,14 @@ __decorate([
     (0, class_validator_1.IsUUID)("4", { message: "O campo local do evento deve ser um UUID válido." }),
     __metadata("design:type", String)
 ], CreateEventDto.prototype, "locationId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: "https://images.unsplash.com/photo-1234567890",
+        description: "URL da imagem do evento",
+        required: false,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)({ message: "O campo imagem deve ser uma string válida" }),
+    __metadata("design:type", String)
+], CreateEventDto.prototype, "image", void 0);
 //# sourceMappingURL=create-event.dto.js.map

@@ -41,7 +41,14 @@ const swagger_1 = require("@nestjs/swagger");
 dotenv.config();
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
-    app.enableCors();
+    const isProd = process.env.NODE_ENV === "production";
+    const origin = isProd ? process.env.FRONTEND_URL : "http://localhost:5173";
+    app.enableCors({
+        origin,
+        methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,

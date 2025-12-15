@@ -11,5 +11,5 @@ import { Like } from "src/likes/entities/like.model";
 import { Location } from "src/locations/entities/location.model";
 import { LessonProgress } from "src/lesson-progress/entities/lesson-progress.model";
 import { EventFeedback } from "src/event-feedbacks/entities/event-feedback.model";
-export declare const models: (typeof User | typeof Event | typeof Location | typeof Registration | typeof Post | typeof Sermon | typeof Lesson | typeof ContactMessage | typeof Donation | typeof Like | typeof LessonProgress | typeof EventFeedback)[];
+export declare const models: (typeof Event | typeof User | typeof Location | typeof Registration | typeof Post | typeof Sermon | typeof Lesson | typeof Donation | typeof Like | typeof LessonProgress | typeof EventFeedback | typeof ContactMessage)[];
 export { User, Event, Registration, Post, Sermon, Lesson, ContactMessage, Donation, Like, Comment, Location, LessonProgress, EventFeedback, };

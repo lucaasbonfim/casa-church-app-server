@@ -22,7 +22,6 @@ const token_payload_param_1 = require("../auth/params/token-payload.param");
 const token_payload_dto_1 = require("../auth/dto/token-payload.dto");
 const find_events_query_dto_1 = require("./dto/find-events-query.dto");
 const swagger_1 = require("@nestjs/swagger");
-const cache_manager_1 = require("@nestjs/cache-manager");
 const user_activity_interceptor_1 = require("../common/interceptors/user-activity.interceptor");
 let EventsController = class EventsController {
     eventsService;
@@ -59,7 +58,6 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Listar todos os eventos" }),
     (0, common_1.Get)(),
-    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [find_events_query_dto_1.FindEventsQueryDto]),
@@ -68,7 +66,6 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Listar detalhes de um evento especifico" }),
     (0, common_1.Get)(":id"),
-    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
