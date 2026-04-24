@@ -11,5 +11,6 @@ export declare class AuthService {
         token: string;
         name: string;
         email: string;
+        profileImage: string | null;
     }>;
 }

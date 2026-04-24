@@ -11,6 +11,9 @@ import { Like } from "src/likes/entities/like.model";
 import { Location } from "src/locations/entities/location.model";
 import { LessonProgress } from "src/lesson-progress/entities/lesson-progress.model";
 import { EventFeedback } from "src/event-feedbacks/entities/event-feedback.model";
+import { ChurchHouse } from "src/church-houses/entities/church-house.model";
+import { HomeContent } from "src/home-content/entities/home-content.model";
+import { Devotional } from "src/devotionals/entities/devotional.model";
 
 export const models = [
   User,
@@ -24,6 +27,9 @@ export const models = [
   Like,
   Comment,
   Location,
+  ChurchHouse,
+  HomeContent,
+  Devotional,
   LessonProgress,
   EventFeedback,
 ];
@@ -40,6 +46,9 @@ export {
   Like,
   Comment,
   Location,
+  ChurchHouse,
+  HomeContent,
+  Devotional,
   LessonProgress,
   EventFeedback,
 };

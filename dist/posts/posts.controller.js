@@ -30,8 +30,8 @@ let PostsController = class PostsController {
     create(createPostDto, tokenPayload) {
         return this.postsService.create(createPostDto, tokenPayload);
     }
-    findAll(findPostsQuery) {
-        return this.postsService.findAll(findPostsQuery);
+    findAll(findPostsQuery, tokenPayload) {
+        return this.postsService.findAll(findPostsQuery, tokenPayload);
     }
     findOne(id) {
         return this.postsService.findOne(id);
@@ -55,8 +55,10 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Listar todas as postagens" }),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)()),
+    __param(1, (0, token_payload_param_1.TokenPayloadParam)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [find_posts_query_dto_1.FindPostsQueryDto]),
+    __metadata("design:paramtypes", [find_posts_query_dto_1.FindPostsQueryDto,
+        token_payload_dto_1.TokenPayloadDto]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findAll", null);
 __decorate([

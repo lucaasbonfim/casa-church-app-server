@@ -35,6 +35,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.TEXT, allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "profileImage", void 0);
+__decorate([
     (0, sequelize_typescript_1.Default)(user_types_1.UserRoles.USER),
     (0, sequelize_typescript_2.Column)(sequelize_typescript_2.DataType.ENUM(...Object.values(user_types_1.UserRoles))),
     __metadata("design:type", String)

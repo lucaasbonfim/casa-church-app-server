@@ -26,6 +26,9 @@ export class User extends Model {
   @Column({ type: DataType.STRING(255), allowNull: false })
   declare password: string;
 
+  @Column({ type: DataType.TEXT, allowNull: true })
+  declare profileImage?: string | null;
+
   @Default(UserRoles.USER)
   @Column(DataType.ENUM(...Object.values(UserRoles)))
   declare role: UserRoles;

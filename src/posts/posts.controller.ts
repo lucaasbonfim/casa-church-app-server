@@ -38,8 +38,11 @@ export class PostsController {
 
   @ApiOperation({ summary: "Listar todas as postagens" })
   @Get()
-  findAll(@Query() findPostsQuery: FindPostsQueryDto) {
-    return this.postsService.findAll(findPostsQuery);
+  findAll(
+    @Query() findPostsQuery: FindPostsQueryDto,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto
+  ) {
+    return this.postsService.findAll(findPostsQuery, tokenPayload);
   }
 
   @ApiOperation({ summary: "Listar detalhes de uma postagem específica" })

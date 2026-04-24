@@ -47,6 +47,7 @@ let AuthService = class AuthService {
             token,
             name: user.name,
             email: user.email,
+            profileImage: user.profileImage ?? null,
         };
     }
 };

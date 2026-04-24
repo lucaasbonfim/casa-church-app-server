@@ -5,6 +5,7 @@ export declare class UpdateUserDto extends UpdateUserDto_base {
     name?: string;
     email?: string;
     password?: string;
+    profileImage?: string;
     role?: UserRoles;
     active?: boolean;
 }
