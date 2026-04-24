@@ -14,6 +14,7 @@ import { EventFeedback } from "src/event-feedbacks/entities/event-feedback.model
 import { ChurchHouse } from "src/church-houses/entities/church-house.model";
 import { HomeContent } from "src/home-content/entities/home-content.model";
 import { Devotional } from "src/devotionals/entities/devotional.model";
+import { PageContent } from "src/page-content/entities/page-content.model";
 
 export const models = [
   User,
@@ -32,6 +33,7 @@ export const models = [
   Devotional,
   LessonProgress,
   EventFeedback,
+  PageContent,
 ];
 
 export {
@@ -51,4 +53,5 @@ export {
   Devotional,
   LessonProgress,
   EventFeedback,
+  PageContent,
 };

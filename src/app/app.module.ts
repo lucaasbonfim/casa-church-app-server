@@ -21,6 +21,7 @@ import { UserActivityModule } from "src/user-activity/user-activity.module";
 import { ChurchHousesModule } from "src/church-houses/church-houses.module";
 import { HomeContentModule } from "src/home-content/home-content.module";
 import { DevotionalsModule } from "src/devotionals/devotionals.module";
+import { PageContentModule } from "src/page-content/page-content.module";
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { DevotionalsModule } from "src/devotionals/devotionals.module";
     ChurchHousesModule,
     HomeContentModule,
     DevotionalsModule,
+    PageContentModule,
     EventFeedbacksModule,
     UserActivityModule,
   ],

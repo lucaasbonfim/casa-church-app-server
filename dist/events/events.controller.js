@@ -47,6 +47,8 @@ let EventsController = class EventsController {
 exports.EventsController = EventsController;
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Cadastrar novos eventos" }),
+    (0, swagger_1.ApiSecurity)("auth-token"),
+    (0, common_1.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, token_payload_param_1.TokenPayloadParam)()),
@@ -73,6 +75,8 @@ __decorate([
 ], EventsController.prototype, "findOne", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Atualizar um eventos especifico" }),
+    (0, swagger_1.ApiSecurity)("auth-token"),
+    (0, common_1.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.Patch)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Body)()),
@@ -84,6 +88,8 @@ __decorate([
 ], EventsController.prototype, "update", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Excluir um evento especifico" }),
+    (0, swagger_1.ApiSecurity)("auth-token"),
+    (0, common_1.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.Delete)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, token_payload_param_1.TokenPayloadParam)()),
@@ -92,8 +98,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], EventsController.prototype, "remove", null);
 exports.EventsController = EventsController = __decorate([
-    (0, swagger_1.ApiSecurity)("auth-token"),
-    (0, common_1.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.UseInterceptors)(user_activity_interceptor_1.UserActivityInterceptor),
     (0, common_1.Controller)("events"),
     __metadata("design:paramtypes", [events_service_1.EventsService])

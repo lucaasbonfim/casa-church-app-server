@@ -4,11 +4,13 @@ import {
   NotFoundException,
   ConflictException,
 } from "@nestjs/common";
+import { createHash, randomBytes } from "crypto";
 import { UsersRepository } from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { HashService } from "src/auth/hash/hash.service";
 import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
+import { EmailService } from "src/email/email.service";
 import {
   CREATE_USER_CONFLICT_MESSAGE,
   CREATED_USER_MESSAGE,
@@ -26,7 +28,8 @@ import { FindUsersQueryDto } from "./dto/find-users-query.dto";
 export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private readonly hashService: HashService
+    private readonly hashService: HashService,
+    private readonly emailService: EmailService
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -36,16 +39,27 @@ export class UsersService {
     if (userExists) throw new ConflictException(CREATE_USER_CONFLICT_MESSAGE);
 
     const hashPassword = await this.hashService.hash(createUserDto.password);
+    const emailVerification = this.createEmailVerificationToken();
     const userData = {
       ...createUserDto,
       password: hashPassword,
       role: USER_ROLE,
+      emailVerified: false,
+      emailVerifiedAt: null,
+      emailVerificationTokenHash: emailVerification.tokenHash,
+      emailVerificationExpiresAt: emailVerification.expiresAt,
     };
 
     const user = await this.usersRepository.create(userData as any);
+    await this.emailService.sendVerificationEmail({
+      to: user.email,
+      name: user.name,
+      verificationUrl: this.buildEmailVerificationUrl(emailVerification.token),
+    });
+
     return {
       message: CREATED_USER_MESSAGE,
-      user,
+      user: this.sanitizeUser(user),
     };
   }
 
@@ -110,5 +124,34 @@ export class UsersService {
     return {
       message: DELETED_USER_MESSAGE,
     };
+  }
+
+  private createEmailVerificationToken() {
+    const token = randomBytes(32).toString("hex");
+    const tokenHash = this.hashEmailVerificationToken(token);
+    const ttlMinutes = Number(process.env.EMAIL_VERIFICATION_TTL_MINUTES) || 1440;
+    const expiresAt = new Date(Date.now() + ttlMinutes * 60 * 1000);
+
+    return { token, tokenHash, expiresAt };
+  }
+
+  private hashEmailVerificationToken(token: string) {
+    return createHash("sha256").update(token).digest("hex");
+  }
+
+  private buildEmailVerificationUrl(token: string) {
+    const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:5173").replace(
+      /\/$/,
+      ""
+    );
+    return `${frontendUrl}/confirmar-email?token=${encodeURIComponent(token)}`;
+  }
+
+  private sanitizeUser(user: any) {
+    const sanitizedUser = user?.get ? user.get({ plain: true }) : { ...user };
+    delete sanitizedUser.password;
+    delete sanitizedUser.emailVerificationTokenHash;
+    delete sanitizedUser.emailVerificationExpiresAt;
+    return sanitizedUser;
   }
 }

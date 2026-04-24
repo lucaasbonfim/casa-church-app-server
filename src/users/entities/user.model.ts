@@ -37,6 +37,25 @@ export class User extends Model {
   @Column(DataType.BOOLEAN)
   declare active: boolean;
 
+  @Default(true)
+  @Column(DataType.BOOLEAN)
+  declare emailVerified: boolean;
+
+  @Column({ type: DataType.DATE, allowNull: true })
+  declare emailVerifiedAt?: Date | null;
+
+  @Column({ type: DataType.STRING(128), allowNull: true })
+  declare emailVerificationTokenHash?: string | null;
+
+  @Column({ type: DataType.DATE, allowNull: true })
+  declare emailVerificationExpiresAt?: Date | null;
+
+  @Column({ type: DataType.STRING(128), allowNull: true })
+  declare passwordResetTokenHash?: string | null;
+
+  @Column({ type: DataType.DATE, allowNull: true })
+  declare passwordResetExpiresAt?: Date | null;
+
   @CreatedAt
   declare createdAt: Date;
 

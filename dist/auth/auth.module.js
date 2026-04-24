@@ -15,12 +15,13 @@ const auth_users_service_1 = require("./auth-users.service");
 const hash_service_1 = require("./hash/hash.service");
 const bcrypt_service_1 = require("./hash/bcrypt.service");
 const jwt_module_1 = require("../config/jwt.module");
+const email_module_1 = require("../email/email.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [(0, common_1.forwardRef)(() => users_module_1.UsersModule), jwt_module_1.JwtModule],
+        imports: [(0, common_1.forwardRef)(() => users_module_1.UsersModule), jwt_module_1.JwtModule, email_module_1.EmailModule],
         controllers: [auth_controller_1.AuthController],
         providers: [
             auth_service_1.AuthService,

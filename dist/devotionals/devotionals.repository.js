@@ -16,10 +16,20 @@ exports.DevotionalsRepository = void 0;
 const sequelize_1 = require("@nestjs/sequelize");
 const sequelize_2 = require("sequelize");
 const models_1 = require("../models");
+function normalizeQueryDate(date) {
+    if (date.getUTCHours() === 0 &&
+        date.getUTCMinutes() === 0 &&
+        date.getUTCSeconds() === 0 &&
+        date.getUTCMilliseconds() === 0) {
+        return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    }
+    return new Date(date);
+}
 function getDayRange(date) {
-    const start = new Date(date);
+    const normalizedDate = normalizeQueryDate(date);
+    const start = new Date(normalizedDate);
     start.setHours(0, 0, 0, 0);
-    const end = new Date(date);
+    const end = new Date(normalizedDate);
     end.setHours(23, 59, 59, 999);
     return [start, end];
 }

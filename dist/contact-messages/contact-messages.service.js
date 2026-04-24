@@ -14,24 +14,26 @@ const common_1 = require("@nestjs/common");
 const contact_messages_constants_1 = require("./contact-messages.constants");
 const messages_constants_1 = require("../common/constants/messages.constants");
 const contact_messages_repository_1 = require("./contact-messages.repository");
+const user_constants_1 = require("../users/user.constants");
 let ContactMessagesService = class ContactMessagesService {
     contactMessagesRepository;
     constructor(contactMessagesRepository) {
         this.contactMessagesRepository = contactMessagesRepository;
     }
-    async create(createContactMessageDto, tokenPayload) {
+    async create(createContactMessageDto) {
         const contactMessageData = {
             ...createContactMessageDto,
         };
-        if (createContactMessageDto.email !== tokenPayload.email)
-            throw new common_1.ForbiddenException(messages_constants_1.FORBIDDEN_OPERATION_MESSAGE);
         const contactMessage = await this.contactMessagesRepository.create(contactMessageData);
         return {
             message: contact_messages_constants_1.CREATED_CONTACT_MESSAGE,
             contactMessage,
         };
     }
-    async findAll(findContactMessagesQuery) {
+    async findAll(findContactMessagesQuery, tokenPayload) {
+        if (tokenPayload.role !== user_constants_1.USER_ADMIN_ROLE) {
+            throw new common_1.ForbiddenException(messages_constants_1.FORBIDDEN_OPERATION_MESSAGE);
+        }
         return await this.contactMessagesRepository.findAll(findContactMessagesQuery);
     }
     async findOne(id) {
@@ -44,7 +46,8 @@ let ContactMessagesService = class ContactMessagesService {
         const contactMessage = await this.contactMessagesRepository.findById(id);
         if (!contactMessage)
             throw new common_1.NotFoundException(contact_messages_constants_1.NOT_FOUND_CONTACT_MESSAGE);
-        if (contactMessage.email !== tokenPayload.email)
+        if (tokenPayload.role !== user_constants_1.USER_ADMIN_ROLE &&
+            contactMessage.email !== tokenPayload.email)
             throw new common_1.ForbiddenException(messages_constants_1.FORBIDDEN_OPERATION_MESSAGE);
         const updatedContactMessage = await this.contactMessagesRepository.update(id, updateContactMessageDto);
         return {
@@ -56,7 +59,8 @@ let ContactMessagesService = class ContactMessagesService {
         const contactMessage = await this.contactMessagesRepository.findById(id);
         if (!contactMessage)
             throw new common_1.NotFoundException(contact_messages_constants_1.NOT_FOUND_CONTACT_MESSAGE);
-        if (contactMessage.email !== tokenPayload.email)
+        if (tokenPayload.role !== user_constants_1.USER_ADMIN_ROLE &&
+            contactMessage.email !== tokenPayload.email)
             throw new common_1.ForbiddenException(messages_constants_1.FORBIDDEN_OPERATION_MESSAGE);
         await this.contactMessagesRepository.delete(id);
         return {

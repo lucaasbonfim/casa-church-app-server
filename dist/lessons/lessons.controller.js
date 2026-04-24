@@ -49,6 +49,8 @@ let LessonsController = class LessonsController {
 exports.LessonsController = LessonsController;
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Cadastrar novas aulas" }),
+    (0, swagger_1.ApiSecurity)("auth-token"),
+    (0, common_2.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, token_payload_param_1.TokenPayloadParam)()),
@@ -77,6 +79,8 @@ __decorate([
 ], LessonsController.prototype, "findOne", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Atualizar uma aula específica" }),
+    (0, swagger_1.ApiSecurity)("auth-token"),
+    (0, common_2.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.Patch)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, common_1.Body)()),
@@ -88,6 +92,8 @@ __decorate([
 ], LessonsController.prototype, "update", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Excluir uma aula específica" }),
+    (0, swagger_1.ApiSecurity)("auth-token"),
+    (0, common_2.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.Delete)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __param(1, (0, token_payload_param_1.TokenPayloadParam)()),
@@ -96,8 +102,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], LessonsController.prototype, "remove", null);
 exports.LessonsController = LessonsController = __decorate([
-    (0, swagger_1.ApiSecurity)("auth-token"),
-    (0, common_2.UseGuards)(auth_token_guard_1.AuthTokenGuard),
     (0, common_1.UseInterceptors)(user_activity_interceptor_1.UserActivityInterceptor),
     (0, common_1.Controller)("lessons"),
     __metadata("design:paramtypes", [lessons_service_1.LessonsService])

@@ -8,7 +8,7 @@ import { Op } from "sequelize";
 export class UsersRepository {
   constructor(
     @InjectModel(User)
-    private readonly userModel: typeof User
+    private readonly userModel: typeof User,
   ) {}
 
   async create(data: CreateUser) {
@@ -29,7 +29,13 @@ export class UsersRepository {
       limit,
       offset,
       order: [[orderBy, orderDirection]],
-      attributes: { exclude: ["password"] },
+      attributes: {
+        exclude: [
+          "password",
+          "emailVerificationTokenHash",
+          "passwordResetTokenHash",
+        ],
+      },
     });
 
     return {
@@ -42,7 +48,13 @@ export class UsersRepository {
 
   async findById(id: string) {
     const user = await this.userModel.findByPk(id, {
-      attributes: { exclude: ["password"] },
+      attributes: {
+        exclude: [
+          "password",
+          "emailVerificationTokenHash",
+          "passwordResetTokenHash",
+        ],
+      },
     });
 
     return user;
@@ -58,10 +70,27 @@ export class UsersRepository {
     return user;
   }
 
-  async update(id: string, data: UpdateUser) {
-    const user = await this.findById(id);
+  async findByEmailVerificationTokenHash(tokenHash: string) {
+    return this.userModel.findOne({
+      where: {
+        emailVerificationTokenHash: tokenHash,
+      },
+    });
+  }
 
-    return await user!.update(data);
+  async findByPasswordResetTokenHash(tokenHash: string) {
+    return this.userModel.findOne({
+      where: {
+        passwordResetTokenHash: tokenHash,
+      },
+    });
+  }
+
+  async update(id: string, data: UpdateUser) {
+    const user = await this.userModel.findByPk(id);
+    await user!.update(data);
+
+    return this.findById(id);
   }
 
   async delete(id: string) {

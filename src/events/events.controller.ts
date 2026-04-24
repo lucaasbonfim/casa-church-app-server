@@ -20,14 +20,14 @@ import { FindEventsQueryDto } from "./dto/find-events-query.dto";
 import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
-@ApiSecurity("auth-token")
-@UseGuards(AuthTokenGuard)
 @UseInterceptors(UserActivityInterceptor)
 @Controller("events")
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @ApiOperation({ summary: "Cadastrar novos eventos" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Post()
   create(
     @Body() createEventDto: CreateEventDto,
@@ -49,6 +49,8 @@ export class EventsController {
   }
 
   @ApiOperation({ summary: "Atualizar um eventos especifico" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Patch(":id")
   update(
     @Param("id") id: string,
@@ -59,6 +61,8 @@ export class EventsController {
   }
 
   @ApiOperation({ summary: "Excluir um evento especifico" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Delete(":id")
   remove(
     @Param("id") id: string,

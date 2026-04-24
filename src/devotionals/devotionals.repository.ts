@@ -2,16 +2,31 @@ import { InjectModel } from "@nestjs/sequelize";
 import { Op } from "sequelize";
 import { Devotional } from "src/models";
 import { FindDevotionalsQueryDto } from "./dto/find-devotionals-query.dto";
-import {
-  CreateDevotional,
-  UpdateDevotional,
-} from "./types/devotional.types";
+import { CreateDevotional, UpdateDevotional } from "./types/devotional.types";
+
+function normalizeQueryDate(date: Date) {
+  if (
+    date.getUTCHours() === 0 &&
+    date.getUTCMinutes() === 0 &&
+    date.getUTCSeconds() === 0 &&
+    date.getUTCMilliseconds() === 0
+  ) {
+    return new Date(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+    );
+  }
+
+  return new Date(date);
+}
 
 function getDayRange(date: Date) {
-  const start = new Date(date);
+  const normalizedDate = normalizeQueryDate(date);
+  const start = new Date(normalizedDate);
   start.setHours(0, 0, 0, 0);
 
-  const end = new Date(date);
+  const end = new Date(normalizedDate);
   end.setHours(23, 59, 59, 999);
 
   return [start, end];
@@ -20,7 +35,7 @@ function getDayRange(date: Date) {
 export class DevotionalsRepository {
   constructor(
     @InjectModel(Devotional)
-    private readonly devotionalModel: typeof Devotional
+    private readonly devotionalModel: typeof Devotional,
   ) {}
 
   async create(data: CreateDevotional) {
