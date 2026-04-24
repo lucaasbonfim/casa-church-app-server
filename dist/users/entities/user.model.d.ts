@@ -8,6 +8,12 @@ export declare class User extends Model {
     profileImage?: string | null;
     role: UserRoles;
     active: boolean;
+    emailVerified: boolean;
+    emailVerifiedAt?: Date | null;
+    emailVerificationTokenHash?: string | null;
+    emailVerificationExpiresAt?: Date | null;
+    passwordResetTokenHash?: string | null;
+    passwordResetExpiresAt?: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }

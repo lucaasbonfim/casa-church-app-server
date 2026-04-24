@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FindContactMessagesQueryDto = void 0;
-const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
 const find_query_dto_1 = require("../../common/dto/find-query.dto");
 class FindContactMessagesQueryDto extends find_query_dto_1.FindQueryDto {
     email;
@@ -19,11 +19,11 @@ class FindContactMessagesQueryDto extends find_query_dto_1.FindQueryDto {
 exports.FindContactMessagesQueryDto = FindContactMessagesQueryDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        example: "azynn@hotmail.com",
-        description: "Filtra pelo e-mail do usuário",
+        example: "contato@casachurch.com",
+        description: "Filtra mensagens pelo email do remetente",
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsUUID)(4, { message: "O parâmetro e-mail deve ser um tipo válido" }),
+    (0, class_validator_1.IsEmail)({}, { message: "O parametro email deve ser um email valido." }),
     __metadata("design:type", String)
 ], FindContactMessagesQueryDto.prototype, "email", void 0);
 //# sourceMappingURL=find-contact-messages-query.dto.js.map

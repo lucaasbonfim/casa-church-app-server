@@ -22,31 +22,39 @@ import { TokenPayloadDto } from "src/auth/dto/token-payload.dto";
 import { FindContactMessagesQueryDto } from "./dto/find-contact-messages-query.dto";
 import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
-@ApiSecurity("auth-token")
-@UseGuards(AuthTokenGuard)
 @UseInterceptors(UserActivityInterceptor)
 @Controller("contact-messages")
 export class ContactMessagesController {
   constructor(
-    private readonly contactMessagesService: ContactMessagesService
+    private readonly contactMessagesService: ContactMessagesService,
   ) {}
 
   @ApiOperation({ summary: "Criar novas mensagens no fórum de discussão" })
   @Post()
-  create(@Body() createContactMessageDto: CreateContactMessageDto, @TokenPayloadParam() tokenPayload: TokenPayloadDto) {
-    return this.contactMessagesService.create(createContactMessageDto, tokenPayload);
+  create(@Body() createContactMessageDto: CreateContactMessageDto) {
+    return this.contactMessagesService.create(createContactMessageDto);
   }
 
   @ApiOperation({ summary: "Listar todas as mensagens do fórum de discussão" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Get()
   @UseInterceptors(CacheInterceptor)
-  findAll(@Query() findContactMessagesQuery: FindContactMessagesQueryDto) {
-    return this.contactMessagesService.findAll(findContactMessagesQuery);
+  findAll(
+    @Query() findContactMessagesQuery: FindContactMessagesQueryDto,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
+  ) {
+    return this.contactMessagesService.findAll(
+      findContactMessagesQuery,
+      tokenPayload,
+    );
   }
 
   @ApiOperation({
     summary: "Listar detalhes de uma mensagem do fórum de discussão",
   })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Get(":id")
   @UseInterceptors(CacheInterceptor)
   findOne(@Param("id") id: string) {
@@ -56,20 +64,31 @@ export class ContactMessagesController {
   @ApiOperation({
     summary: "Atualizar uma mensagem específica do fórum de discussão",
   })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Patch(":id")
   update(
     @Param("id") id: string,
     @Body() updateContactMessageDto: UpdateContactMessageDto,
-    @TokenPayloadParam() tokenPayload: TokenPayloadDto
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
   ) {
-    return this.contactMessagesService.update(id, updateContactMessageDto, tokenPayload);
+    return this.contactMessagesService.update(
+      id,
+      updateContactMessageDto,
+      tokenPayload,
+    );
   }
 
   @ApiOperation({
     summary: "Excluir uma mensagem específica do fórum de discussão",
   })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Delete(":id")
-  remove(@Param("id") id: string, @TokenPayloadParam() tokenPayload: TokenPayloadDto) {
+  remove(
+    @Param("id") id: string,
+    @TokenPayloadParam() tokenPayload: TokenPayloadDto,
+  ) {
     return this.contactMessagesService.remove(id, tokenPayload);
   }
 }

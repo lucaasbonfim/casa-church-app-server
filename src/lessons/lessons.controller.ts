@@ -21,14 +21,14 @@ import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
-@ApiSecurity("auth-token")
-@UseGuards(AuthTokenGuard)
 @UseInterceptors(UserActivityInterceptor)
 @Controller("lessons")
 export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
   @ApiOperation({ summary: "Cadastrar novas aulas" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Post()
   create(
     @Body() createLessonDto: CreateLessonDto,
@@ -54,6 +54,8 @@ export class LessonsController {
   }
 
   @ApiOperation({ summary: "Atualizar uma aula específica" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Patch(":id")
   update(
     @Param("id") id: string,
@@ -64,6 +66,8 @@ export class LessonsController {
   }
 
   @ApiOperation({ summary: "Excluir uma aula específica" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Delete(":id")
   remove(
     @Param("id") id: string,

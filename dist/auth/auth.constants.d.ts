@@ -1,2 +1,9 @@
 export declare const REQUEST_TOKEN_PAYLOAD = "token";
 export declare const UNAUTHORIZED_EMAIL_PASSWORD_MESSAGE = "E-mail ou senha incorretos.";
+export declare const EMAIL_NOT_VERIFIED_MESSAGE = "Confirme seu email antes de acessar a plataforma.";
+export declare const INVALID_EMAIL_CONFIRMATION_TOKEN_MESSAGE = "Link de confirmacao invalido ou expirado.";
+export declare const EMAIL_CONFIRMED_MESSAGE = "Email confirmado com sucesso.";
+export declare const CONFIRMATION_EMAIL_SENT_MESSAGE = "Enviamos um link de confirmacao para o seu email.";
+export declare const PASSWORD_RESET_EMAIL_SENT_MESSAGE = "Se este email estiver cadastrado, enviaremos um link para redefinir sua senha.";
+export declare const INVALID_PASSWORD_RESET_TOKEN_MESSAGE = "Link de redefinicao invalido ou expirado.";
+export declare const PASSWORD_RESET_SUCCESS_MESSAGE = "Senha redefinida com sucesso.";

@@ -20,14 +20,14 @@ import { ApiOperation, ApiSecurity } from "@nestjs/swagger";
 import { FindSermonQueryDto } from "./dto/find-sermon-query.dto";
 import { UserActivityInterceptor } from "src/common/interceptors/user-activity.interceptor";
 
-@ApiSecurity("auth-token")
-@UseGuards(AuthTokenGuard)
 @UseInterceptors(UserActivityInterceptor)
 @Controller("sermons")
 export class SermonsController {
   constructor(private readonly sermonsService: SermonsService) {}
 
   @ApiOperation({ summary: "Criar novos sermões" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Post()
   create(
     @Body() createSermonDto: CreateSermonDto,
@@ -49,6 +49,8 @@ export class SermonsController {
   }
 
   @ApiOperation({ summary: "Atualizar um sermão específico" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Patch(":id")
   update(
     @Param("id") id: string,
@@ -59,6 +61,8 @@ export class SermonsController {
   }
 
   @ApiOperation({ summary: "Excluir um sermão específico" })
+  @ApiSecurity("auth-token")
+  @UseGuards(AuthTokenGuard)
   @Delete(":id")
   remove(
     @Param("id") id: string,

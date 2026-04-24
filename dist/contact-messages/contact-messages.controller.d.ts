@@ -6,15 +6,15 @@ import { FindContactMessagesQueryDto } from "./dto/find-contact-messages-query.d
 export declare class ContactMessagesController {
     private readonly contactMessagesService;
     constructor(contactMessagesService: ContactMessagesService);
-    create(createContactMessageDto: CreateContactMessageDto, tokenPayload: TokenPayloadDto): Promise<{
+    create(createContactMessageDto: CreateContactMessageDto): Promise<{
         message: string;
         contactMessage: import("./entities/contact-message.model").ContactMessage;
     }>;
-    findAll(findContactMessagesQuery: FindContactMessagesQueryDto): Promise<{
+    findAll(findContactMessagesQuery: FindContactMessagesQueryDto, tokenPayload: TokenPayloadDto): Promise<{
         total: number;
         page: number;
         totalPages: number;
-        likes: import("./entities/contact-message.model").ContactMessage[];
+        contactMessages: import("./entities/contact-message.model").ContactMessage[];
     }>;
     findOne(id: string): Promise<import("./entities/contact-message.model").ContactMessage>;
     update(id: string, updateContactMessageDto: UpdateContactMessageDto, tokenPayload: TokenPayloadDto): Promise<{

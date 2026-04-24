@@ -8,7 +8,7 @@ export declare class UsersController {
     constructor(usersService: UsersService);
     create(createUserDto: CreateUserDto): Promise<{
         message: string;
-        user: import("./entities/user.model").User;
+        user: any;
     }>;
     findAll(findUsersQuery: FindUsersQueryDto): Promise<{
         total: number;
@@ -19,7 +19,7 @@ export declare class UsersController {
     findOne(id: string): Promise<import("./entities/user.model").User>;
     update(id: string, updateUserDto: UpdateUserDto, tokenPayload: TokenPayloadDto): Promise<{
         message: string;
-        user: import("./entities/user.model").User;
+        user: import("./entities/user.model").User | null;
     }>;
     remove(id: string, tokenPayload: TokenPayloadDto): Promise<{
         message: string;

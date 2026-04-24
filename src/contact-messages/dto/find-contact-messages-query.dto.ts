@@ -1,13 +1,13 @@
-import { IsOptional, IsUUID } from "class-validator";
 import { ApiPropertyOptional } from "@nestjs/swagger";
+import { IsEmail, IsOptional } from "class-validator";
 import { FindQueryDto } from "src/common/dto/find-query.dto";
 
 export class FindContactMessagesQueryDto extends FindQueryDto {
   @ApiPropertyOptional({
-    example: "azynn@hotmail.com",
-    description: "Filtra pelo e-mail do usuário",
+    example: "contato@casachurch.com",
+    description: "Filtra mensagens pelo email do remetente",
   })
   @IsOptional()
-  @IsUUID(4, { message: "O parâmetro e-mail deve ser um tipo válido" })
+  @IsEmail({}, { message: "O parametro email deve ser um email valido." })
   email?: string;
 }

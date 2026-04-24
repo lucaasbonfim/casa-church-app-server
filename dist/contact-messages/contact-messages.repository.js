@@ -40,7 +40,7 @@ let ContactMessagesRepository = class ContactMessagesRepository {
             total: count,
             page,
             totalPages: Math.ceil(count / limit),
-            likes: rows,
+            contactMessages: rows,
         };
     }
     async findById(id) {

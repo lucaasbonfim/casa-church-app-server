@@ -11,31 +11,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
+const crypto_1 = require("crypto");
 const users_repository_1 = require("./users.repository");
 const hash_service_1 = require("../auth/hash/hash.service");
+const email_service_1 = require("../email/email.service");
 const user_constants_1 = require("./user.constants");
 const messages_constants_1 = require("../common/constants/messages.constants");
 let UsersService = class UsersService {
     usersRepository;
     hashService;
-    constructor(usersRepository, hashService) {
+    emailService;
+    constructor(usersRepository, hashService, emailService) {
         this.usersRepository = usersRepository;
         this.hashService = hashService;
+        this.emailService = emailService;
     }
     async create(createUserDto) {
         const userExists = await this.usersRepository.findByEmail(createUserDto.email);
         if (userExists)
             throw new common_1.ConflictException(user_constants_1.CREATE_USER_CONFLICT_MESSAGE);
         const hashPassword = await this.hashService.hash(createUserDto.password);
+        const emailVerification = this.createEmailVerificationToken();
         const userData = {
             ...createUserDto,
             password: hashPassword,
             role: user_constants_1.USER_ROLE,
+            emailVerified: false,
+            emailVerifiedAt: null,
+            emailVerificationTokenHash: emailVerification.tokenHash,
+            emailVerificationExpiresAt: emailVerification.expiresAt,
         };
         const user = await this.usersRepository.create(userData);
+        await this.emailService.sendVerificationEmail({
+            to: user.email,
+            name: user.name,
+            verificationUrl: this.buildEmailVerificationUrl(emailVerification.token),
+        });
         return {
             message: user_constants_1.CREATED_USER_MESSAGE,
-            user,
+            user: this.sanitizeUser(user),
         };
     }
     async findAll(findUsersQuery) {
@@ -86,11 +100,33 @@ let UsersService = class UsersService {
             message: user_constants_1.DELETED_USER_MESSAGE,
         };
     }
+    createEmailVerificationToken() {
+        const token = (0, crypto_1.randomBytes)(32).toString("hex");
+        const tokenHash = this.hashEmailVerificationToken(token);
+        const ttlMinutes = Number(process.env.EMAIL_VERIFICATION_TTL_MINUTES) || 1440;
+        const expiresAt = new Date(Date.now() + ttlMinutes * 60 * 1000);
+        return { token, tokenHash, expiresAt };
+    }
+    hashEmailVerificationToken(token) {
+        return (0, crypto_1.createHash)("sha256").update(token).digest("hex");
+    }
+    buildEmailVerificationUrl(token) {
+        const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:5173").replace(/\/$/, "");
+        return `${frontendUrl}/confirmar-email?token=${encodeURIComponent(token)}`;
+    }
+    sanitizeUser(user) {
+        const sanitizedUser = user?.get ? user.get({ plain: true }) : { ...user };
+        delete sanitizedUser.password;
+        delete sanitizedUser.emailVerificationTokenHash;
+        delete sanitizedUser.emailVerificationExpiresAt;
+        return sanitizedUser;
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_repository_1.UsersRepository,
-        hash_service_1.HashService])
+        hash_service_1.HashService,
+        email_service_1.EmailService])
 ], UsersService);
 //# sourceMappingURL=users.service.js.map

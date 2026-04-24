@@ -1,58 +1,62 @@
 import { InjectModel } from "@nestjs/sequelize";
 import { ContactMessage } from "src/models";
-import { CreateContactMessage, UpdateContactMessage } from "./types/contact-message.types";
+import {
+  CreateContactMessage,
+  UpdateContactMessage,
+} from "./types/contact-message.types";
 import { FindContactMessagesQueryDto } from "./dto/find-contact-messages-query.dto";
 
 export class ContactMessagesRepository {
-    constructor(
-        @InjectModel(ContactMessage)
-        private readonly contactMessageModel: typeof ContactMessage
-    ) {}
+  constructor(
+    @InjectModel(ContactMessage)
+    private readonly contactMessageModel: typeof ContactMessage,
+  ) {}
 
-    async create(data: CreateContactMessage) {
-        const createdContactMessage = await this.contactMessageModel.create(data);
+  async create(data: CreateContactMessage) {
+    const createdContactMessage = await this.contactMessageModel.create(data);
 
-        return createdContactMessage;
-    }
+    return createdContactMessage;
+  }
 
-    async findAll(findContactMessagesQuery: FindContactMessagesQueryDto) {
-        const { page, limit, email, orderBy, orderDirection } = findContactMessagesQuery;
-        const offset = (page - 1) * limit;
+  async findAll(findContactMessagesQuery: FindContactMessagesQueryDto) {
+    const { page, limit, email, orderBy, orderDirection } =
+      findContactMessagesQuery;
+    const offset = (page - 1) * limit;
 
-        const where: any = {};
-        if (email) where.email = email;
-        
-        const { rows, count } = await this.contactMessageModel.findAndCountAll({
-        where,
-        limit,
-        offset,
-        order: [[orderBy, orderDirection]],
-        });
+    const where: any = {};
+    if (email) where.email = email;
 
-        return {
-        total: count,
-        page,
-        totalPages: Math.ceil(count / limit),
-        likes: rows,
-        };
-    }
+    const { rows, count } = await this.contactMessageModel.findAndCountAll({
+      where,
+      limit,
+      offset,
+      order: [[orderBy, orderDirection]],
+    });
 
-    async findById(id: string) {
-        const contactMessage = await this.contactMessageModel.findByPk(id);
+    return {
+      total: count,
+      page,
+      totalPages: Math.ceil(count / limit),
+      contactMessages: rows,
+    };
+  }
 
-        return contactMessage;
-    }
+  async findById(id: string) {
+    const contactMessage = await this.contactMessageModel.findByPk(id);
 
-    async update(id: string, data: UpdateContactMessage) {
-        const contactMessage = await this.findById(id);
+    return contactMessage;
+  }
 
-        return await contactMessage!.update(data);
-    }
+  async update(id: string, data: UpdateContactMessage) {
+    const contactMessage = await this.findById(id);
 
-    async delete(id: string) {
-        const contactMessage = await this.findById(id);
-        await contactMessage!.destroy();
+    return await contactMessage!.update(data);
+  }
 
-        return;
-    }
+  async delete(id: string) {
+    const contactMessage = await this.findById(id);
+    await contactMessage!.destroy();
+
+    return;
+  }
 }

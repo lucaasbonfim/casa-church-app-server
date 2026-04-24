@@ -9,7 +9,7 @@ export declare class ContactMessagesRepository {
         total: number;
         page: number;
         totalPages: number;
-        likes: ContactMessage[];
+        contactMessages: ContactMessage[];
     }>;
     findById(id: string): Promise<ContactMessage | null>;
     update(id: string, data: UpdateContactMessage): Promise<ContactMessage>;

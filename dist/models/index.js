@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EventFeedback = exports.LessonProgress = exports.Devotional = exports.HomeContent = exports.ChurchHouse = exports.Location = exports.Comment = exports.Like = exports.Donation = exports.ContactMessage = exports.Lesson = exports.Sermon = exports.Post = exports.Registration = exports.Event = exports.User = exports.models = void 0;
+exports.PageContent = exports.EventFeedback = exports.LessonProgress = exports.Devotional = exports.HomeContent = exports.ChurchHouse = exports.Location = exports.Comment = exports.Like = exports.Donation = exports.ContactMessage = exports.Lesson = exports.Sermon = exports.Post = exports.Registration = exports.Event = exports.User = exports.models = void 0;
 const user_model_1 = require("../users/entities/user.model");
 Object.defineProperty(exports, "User", { enumerable: true, get: function () { return user_model_1.User; } });
 const event_model_1 = require("../events/entities/event.model");
@@ -33,6 +33,8 @@ const home_content_model_1 = require("../home-content/entities/home-content.mode
 Object.defineProperty(exports, "HomeContent", { enumerable: true, get: function () { return home_content_model_1.HomeContent; } });
 const devotional_model_1 = require("../devotionals/entities/devotional.model");
 Object.defineProperty(exports, "Devotional", { enumerable: true, get: function () { return devotional_model_1.Devotional; } });
+const page_content_model_1 = require("../page-content/entities/page-content.model");
+Object.defineProperty(exports, "PageContent", { enumerable: true, get: function () { return page_content_model_1.PageContent; } });
 exports.models = [
     user_model_1.User,
     event_model_1.Event,
@@ -50,5 +52,6 @@ exports.models = [
     devotional_model_1.Devotional,
     lesson_progress_model_1.LessonProgress,
     event_feedback_model_1.EventFeedback,
+    page_content_model_1.PageContent,
 ];
 //# sourceMappingURL=index.js.map

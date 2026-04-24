@@ -14,6 +14,8 @@ export declare class UsersRepository {
     }>;
     findById(id: string): Promise<User | null>;
     findByEmail(email: string): Promise<User | null>;
-    update(id: string, data: UpdateUser): Promise<User>;
+    findByEmailVerificationTokenHash(tokenHash: string): Promise<User | null>;
+    findByPasswordResetTokenHash(tokenHash: string): Promise<User | null>;
+    update(id: string, data: UpdateUser): Promise<User | null>;
     delete(id: string): Promise<void>;
 }

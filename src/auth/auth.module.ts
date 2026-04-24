@@ -6,9 +6,10 @@ import { AuthUsersService } from "./auth-users.service";
 import { HashService } from "./hash/hash.service";
 import { BcryptService } from "./hash/bcrypt.service";
 import { JwtModule } from "src/config/jwt.module";
+import { EmailModule } from "src/email/email.module";
 
 @Module({
-  imports: [forwardRef(() => UsersModule), JwtModule],
+  imports: [forwardRef(() => UsersModule), JwtModule, EmailModule],
   controllers: [AuthController],
   providers: [
     AuthService,

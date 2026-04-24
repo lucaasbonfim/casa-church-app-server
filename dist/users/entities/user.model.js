@@ -49,6 +49,31 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "active", void 0);
 __decorate([
+    (0, sequelize_typescript_1.Default)(true),
+    (0, sequelize_typescript_2.Column)(sequelize_typescript_2.DataType.BOOLEAN),
+    __metadata("design:type", Boolean)
+], User.prototype, "emailVerified", void 0);
+__decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.DATE, allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "emailVerifiedAt", void 0);
+__decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.STRING(128), allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "emailVerificationTokenHash", void 0);
+__decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.DATE, allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "emailVerificationExpiresAt", void 0);
+__decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.STRING(128), allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "passwordResetTokenHash", void 0);
+__decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.DATE, allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "passwordResetExpiresAt", void 0);
+__decorate([
     sequelize_typescript_2.CreatedAt,
     __metadata("design:type", Date)
 ], User.prototype, "createdAt", void 0);

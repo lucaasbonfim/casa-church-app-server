@@ -36,7 +36,13 @@ let UsersRepository = class UsersRepository {
             limit,
             offset,
             order: [[orderBy, orderDirection]],
-            attributes: { exclude: ["password"] },
+            attributes: {
+                exclude: [
+                    "password",
+                    "emailVerificationTokenHash",
+                    "passwordResetTokenHash",
+                ],
+            },
         });
         return {
             total: count,
@@ -47,7 +53,13 @@ let UsersRepository = class UsersRepository {
     }
     async findById(id) {
         const user = await this.userModel.findByPk(id, {
-            attributes: { exclude: ["password"] },
+            attributes: {
+                exclude: [
+                    "password",
+                    "emailVerificationTokenHash",
+                    "passwordResetTokenHash",
+                ],
+            },
         });
         return user;
     }
@@ -59,9 +71,24 @@ let UsersRepository = class UsersRepository {
         });
         return user;
     }
+    async findByEmailVerificationTokenHash(tokenHash) {
+        return this.userModel.findOne({
+            where: {
+                emailVerificationTokenHash: tokenHash,
+            },
+        });
+    }
+    async findByPasswordResetTokenHash(tokenHash) {
+        return this.userModel.findOne({
+            where: {
+                passwordResetTokenHash: tokenHash,
+            },
+        });
+    }
     async update(id, data) {
-        const user = await this.findById(id);
-        return await user.update(data);
+        const user = await this.userModel.findByPk(id);
+        await user.update(data);
+        return this.findById(id);
     }
     async delete(id) {
         const user = await this.findById(id);
