@@ -7,5 +7,6 @@ export declare class AuthController {
         token: string;
         name: string;
         email: string;
+        profileImage: string | null;
     }>;
 }

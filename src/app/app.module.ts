@@ -18,6 +18,9 @@ import { LocationsModule } from "src/locations/locations.module";
 import { LessonProgressModule } from "src/lesson-progress/lesson-progress.module";
 import { EventFeedbacksModule } from "src/event-feedbacks/event-feedbacks.module";
 import { UserActivityModule } from "src/user-activity/user-activity.module";
+import { ChurchHousesModule } from "src/church-houses/church-houses.module";
+import { HomeContentModule } from "src/home-content/home-content.module";
+import { DevotionalsModule } from "src/devotionals/devotionals.module";
 
 @Module({
   imports: [
@@ -36,6 +39,9 @@ import { UserActivityModule } from "src/user-activity/user-activity.module";
     CommentsModule,
     LikesModule,
     LocationsModule,
+    ChurchHousesModule,
+    HomeContentModule,
+    DevotionalsModule,
     EventFeedbacksModule,
     UserActivityModule,
   ],

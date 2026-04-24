@@ -1,5 +1,6 @@
 import { InjectModel } from "@nestjs/sequelize";
-import { Post, User } from "src/models";
+import { col, fn } from "sequelize";
+import { Comment, Like, Post, User } from "src/models";
 import { CreatePost } from "./types/post.types";
 import { FindPostsQueryDto } from "./dto/find-posts-query.dto";
 
@@ -54,7 +55,46 @@ export class PostsRepository {
       where: {
         id: userIds,
       },
-      attributes: ["id", "name"],
+      attributes: ["id", "name", "profileImage"],
+    });
+  }
+
+  async countCommentsByPostIds(postIds: string[]) {
+    if (!postIds.length) return [];
+
+    return Comment.findAll({
+      where: {
+        postId: postIds,
+      },
+      attributes: ["postId", [fn("COUNT", col("id")), "count"]],
+      group: ["postId"],
+      raw: true,
+    });
+  }
+
+  async countLikesByPostIds(postIds: string[]) {
+    if (!postIds.length) return [];
+
+    return Like.findAll({
+      where: {
+        postId: postIds,
+      },
+      attributes: ["postId", [fn("COUNT", col("id")), "count"]],
+      group: ["postId"],
+      raw: true,
+    });
+  }
+
+  async findCurrentUserLikesByPostIds(userId: string, postIds: string[]) {
+    if (!userId || !postIds.length) return [];
+
+    return Like.findAll({
+      where: {
+        userId,
+        postId: postIds,
+      },
+      attributes: ["id", "postId"],
+      raw: true,
     });
   }
 }

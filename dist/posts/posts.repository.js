@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostsRepository = void 0;
 const sequelize_1 = require("@nestjs/sequelize");
+const sequelize_2 = require("sequelize");
 const models_1 = require("../models");
 let PostsRepository = class PostsRepository {
     postModel;
@@ -57,7 +58,43 @@ let PostsRepository = class PostsRepository {
             where: {
                 id: userIds,
             },
-            attributes: ["id", "name"],
+            attributes: ["id", "name", "profileImage"],
+        });
+    }
+    async countCommentsByPostIds(postIds) {
+        if (!postIds.length)
+            return [];
+        return models_1.Comment.findAll({
+            where: {
+                postId: postIds,
+            },
+            attributes: ["postId", [(0, sequelize_2.fn)("COUNT", (0, sequelize_2.col)("id")), "count"]],
+            group: ["postId"],
+            raw: true,
+        });
+    }
+    async countLikesByPostIds(postIds) {
+        if (!postIds.length)
+            return [];
+        return models_1.Like.findAll({
+            where: {
+                postId: postIds,
+            },
+            attributes: ["postId", [(0, sequelize_2.fn)("COUNT", (0, sequelize_2.col)("id")), "count"]],
+            group: ["postId"],
+            raw: true,
+        });
+    }
+    async findCurrentUserLikesByPostIds(userId, postIds) {
+        if (!userId || !postIds.length)
+            return [];
+        return models_1.Like.findAll({
+            where: {
+                userId,
+                postId: postIds,
+            },
+            attributes: ["id", "postId"],
+            raw: true,
         });
     }
 };

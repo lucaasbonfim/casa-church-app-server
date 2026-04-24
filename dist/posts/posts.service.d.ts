@@ -9,9 +9,15 @@ export declare class PostsService {
         message: string;
         post: import("./entities/post.model").Post;
     }>;
-    findAll(findPostsQuery: FindPostsQueryDto): Promise<{
+    findAll(findPostsQuery: FindPostsQueryDto, tokenPayload?: TokenPayloadDto): Promise<{
         posts: {
             user: import("../models").User | null;
+            social: {
+                likesCount: number;
+                commentsCount: number;
+                currentUserLikeId: any;
+                isLikedByCurrentUser: boolean;
+            };
             id: string;
             userId: string;
             content: string;

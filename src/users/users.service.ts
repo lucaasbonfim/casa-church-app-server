@@ -75,16 +75,23 @@ export class UsersService {
       const emailExists = await this.usersRepository.findByEmail(
         updateUserDto.email
       );
-      if (emailExists)
+      if (emailExists && emailExists.id !== id)
         throw new ConflictException(UPDATE_USER_CONFLICT_MESSAGE);
     }
 
-    if (updateUserDto.password) {
-      const passwordHash = await this.hashService.hash(updateUserDto.password);
-      updateUserDto.password = passwordHash;
+    const updatePayload: any = { ...updateUserDto };
+
+    if (updatePayload.password) {
+      const passwordHash = await this.hashService.hash(updatePayload.password);
+      updatePayload.password = passwordHash;
     }
 
-    const updatedUser = await this.usersRepository.update(id, updateUserDto);
+    if (updatePayload.profileImage !== undefined) {
+      const normalizedProfileImage = updatePayload.profileImage.trim();
+      updatePayload.profileImage = normalizedProfileImage || null;
+    }
+
+    const updatedUser = await this.usersRepository.update(id, updatePayload);
     return {
       message: UPDATED_USER_MESSAGE,
       user: updatedUser,

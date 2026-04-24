@@ -54,7 +54,7 @@ export class CommentsRepository {
       where: {
         id: userIds,
       },
-      attributes: ["id", "name"],
+      attributes: ["id", "name", "profileImage"],
     });
   }
 }

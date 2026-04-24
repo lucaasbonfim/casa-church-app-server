@@ -38,11 +38,16 @@ const app_module_1 = require("./app/app.module");
 const common_1 = require("@nestjs/common");
 const dotenv = __importStar(require("dotenv"));
 const swagger_1 = require("@nestjs/swagger");
+const express_1 = require("express");
 dotenv.config();
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const isProd = process.env.NODE_ENV === "production";
-    const origin = isProd ? process.env.FRONTEND_URL : "http://localhost:5173";
+    const origin = isProd
+        ? process.env.FRONTEND_URL
+        : ["http://localhost:5173", "http://127.0.0.1:5173"];
+    app.use((0, express_1.json)({ limit: "5mb" }));
+    app.use((0, express_1.urlencoded)({ extended: true, limit: "5mb" }));
     app.enableCors({
         origin,
         methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
@@ -56,7 +61,7 @@ async function bootstrap() {
     }));
     const documentBuilderConfig = new swagger_1.DocumentBuilder()
         .setTitle("Casa Church")
-        .setDescription("API para gerenciamento e integração de dados da Casa Church, facilitando a administração de eventos, membros e recursos da comunidade.")
+        .setDescription("API para gerenciamento e integracao de dados da Casa Church, facilitando a administracao de eventos, membros e recursos da comunidade.")
         .setVersion("1.0")
         .addApiKey({
         type: "apiKey",

@@ -5,6 +5,7 @@ export declare class User extends Model {
     name: string;
     email: string;
     password: string;
+    profileImage?: string | null;
     role: UserRoles;
     active: boolean;
     createdAt: Date;

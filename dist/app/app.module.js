@@ -25,6 +25,9 @@ const locations_module_1 = require("../locations/locations.module");
 const lesson_progress_module_1 = require("../lesson-progress/lesson-progress.module");
 const event_feedbacks_module_1 = require("../event-feedbacks/event-feedbacks.module");
 const user_activity_module_1 = require("../user-activity/user-activity.module");
+const church_houses_module_1 = require("../church-houses/church-houses.module");
+const home_content_module_1 = require("../home-content/home-content.module");
+const devotionals_module_1 = require("../devotionals/devotionals.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -46,6 +49,9 @@ exports.AppModule = AppModule = __decorate([
             comments_module_1.CommentsModule,
             likes_module_1.LikesModule,
             locations_module_1.LocationsModule,
+            church_houses_module_1.ChurchHousesModule,
+            home_content_module_1.HomeContentModule,
+            devotionals_module_1.DevotionalsModule,
             event_feedbacks_module_1.EventFeedbacksModule,
             user_activity_module_1.UserActivityModule,
         ],

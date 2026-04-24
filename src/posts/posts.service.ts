@@ -30,22 +30,54 @@ export class PostsService {
     };
   }
 
-  async findAll(findPostsQuery: FindPostsQueryDto) {
+  async findAll(
+    findPostsQuery: FindPostsQueryDto,
+    tokenPayload?: TokenPayloadDto
+  ) {
     const result = await this.postsRepository.findAll(findPostsQuery);
+    const postIds = result.posts.map((post) => post.id);
 
-    // pega todos os userIds únicos
+    if (!postIds.length) {
+      return {
+        ...result,
+        posts: [],
+      };
+    }
+
     const userIds = [...new Set(result.posts.map((post) => post.userId))];
+    const [users, commentsCountRows, likesCountRows, currentUserLikes] =
+      await Promise.all([
+        this.postsRepository.findUsersByIds(userIds),
+        this.postsRepository.countCommentsByPostIds(postIds),
+        this.postsRepository.countLikesByPostIds(postIds),
+        tokenPayload?.id
+          ? this.postsRepository.findCurrentUserLikesByPostIds(
+              tokenPayload.id,
+              postIds
+            )
+          : Promise.resolve([]),
+      ]);
 
-    // busca usuários
-    const users = await this.postsRepository.findUsersByIds(userIds);
-
-    // cria mapa id -> user
     const usersMap = new Map(users.map((user) => [user.id, user]));
+    const commentsCountMap = new Map(
+      commentsCountRows.map((item: any) => [item.postId, Number(item.count)])
+    );
+    const likesCountMap = new Map(
+      likesCountRows.map((item: any) => [item.postId, Number(item.count)])
+    );
+    const currentUserLikesMap = new Map(
+      currentUserLikes.map((like: any) => [like.postId, like.id])
+    );
 
-    // anexa usuário em cada post
     const postsWithUser = result.posts.map((post) => ({
       ...post.toJSON(),
       user: usersMap.get(post.userId) || null,
+      social: {
+        likesCount: likesCountMap.get(post.id) || 0,
+        commentsCount: commentsCountMap.get(post.id) || 0,
+        currentUserLikeId: currentUserLikesMap.get(post.id) || null,
+        isLikedByCurrentUser: currentUserLikesMap.has(post.id),
+      },
     }));
 
     return {

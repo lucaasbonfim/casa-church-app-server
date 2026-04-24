@@ -5,53 +5,54 @@ import {
   IsString,
   IsEmail,
   IsEnum,
+  IsOptional,
 } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { UserRoles } from "../types/user.types";
 
 export class CreateUserDto {
   @ApiProperty({
     example: "Anderson Souza",
-    description: "Nome completo do usuário (máx. 150 caracteres)",
+    description: "Nome completo do usuario (max. 150 caracteres)",
   })
-  @IsNotEmpty({ message: "O campo nome não pode ser vazio." })
+  @IsNotEmpty({ message: "O campo nome nao pode ser vazio." })
   @IsString({ message: "O campo nome deve ser um texto." })
   @MaxLength(150)
   name: string;
 
   @ApiProperty({
     example: "anderson.souza@email.com",
-    description: "Endereço de e-mail válido do usuário (máx. 100 caracteres)",
+    description: "Endereco de e-mail valido do usuario (max. 100 caracteres)",
   })
-  @IsNotEmpty({ message: "O campo email não pode ser vazio." })
-  @IsEmail({}, { message: "O campo email deve ser um email válido." })
+  @IsNotEmpty({ message: "O campo email nao pode ser vazio." })
+  @IsEmail({}, { message: "O campo email deve ser um email valido." })
   @MaxLength(100)
   email: string;
 
   @ApiProperty({
     example: "senhaSegura123",
-    description: "Senha de acesso do usuário (mín. 6 caracteres)",
+    description: "Senha de acesso do usuario (min. 6 caracteres)",
   })
-  @IsNotEmpty({ message: "O campo senha não pode ser vazio." })
+  @IsNotEmpty({ message: "O campo senha nao pode ser vazio." })
   @IsString({ message: "O campo senha deve ser um texto." })
   @MaxLength(255)
-  @MinLength(6, { message: "A senha deve conter no mínimo 6 caracteres" })
+  @MinLength(6, { message: "A senha deve conter no minimo 6 caracteres" })
   password: string;
 
   @ApiProperty({
     example: "user",
-    description: "Cargo do usuário dentro do sistema",
+    description: "Cargo do usuario dentro do sistema",
     enum: UserRoles,
   })
-  @IsNotEmpty({ message: "O campo cargo não pode ser vazio." })
+  @IsNotEmpty({ message: "O campo cargo nao pode ser vazio." })
   @IsEnum(UserRoles, { message: "O campo cargo deve ser 'user' ou 'admin'." })
   role: UserRoles;
 
-  // @ApiPropertyOptional({
-  //   example: true,
-  //   description: "Define se o usuário está ativo ou inativo (padrão: true)",
-  // })
-  // @IsOptional()
-  // @IsBoolean({ message: "O campo ativo deve ser um booleano." })
-  // active?: boolean;
+  @ApiPropertyOptional({
+    example: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+    description: "Imagem de perfil em data URL ou URL externa",
+  })
+  @IsOptional()
+  @IsString({ message: "O campo imagem de perfil deve ser um texto." })
+  profileImage?: string;
 }
