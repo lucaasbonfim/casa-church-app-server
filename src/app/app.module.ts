@@ -22,6 +22,8 @@ import { ChurchHousesModule } from "src/church-houses/church-houses.module";
 import { HomeContentModule } from "src/home-content/home-content.module";
 import { DevotionalsModule } from "src/devotionals/devotionals.module";
 import { PageContentModule } from "src/page-content/page-content.module";
+import { CacheInvalidationInterceptor } from "src/common/interceptors/cache-invalidation.interceptor";
+import { GalleryModule } from "src/gallery/gallery.module";
 
 @Module({
   imports: [
@@ -46,6 +48,13 @@ import { PageContentModule } from "src/page-content/page-content.module";
     PageContentModule,
     EventFeedbacksModule,
     UserActivityModule,
+    GalleryModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInvalidationInterceptor,
+    },
   ],
 })
 export class AppModule {}

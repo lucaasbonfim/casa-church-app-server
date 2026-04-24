@@ -20,7 +20,7 @@ export class UserActivityInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
 
     const authHeader = request.headers.authorization;
-    let userId = "anonymous";
+    let userId: string | null = null;
 
     if (authHeader && typeof authHeader === "string") {
       try {
@@ -34,8 +34,8 @@ export class UserActivityInterceptor implements NestInterceptor {
       }
     }
 
-    const method = request.method;
-    const path = request.route?.path || request.url;
+    const method = request.method?.toUpperCase();
+    const path = (request.originalUrl || request.url || request.route?.path || "").split("?")[0];
 
     const body = { ...request.body };
     delete body.password;

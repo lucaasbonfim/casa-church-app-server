@@ -23,6 +23,11 @@ import {
 } from "./user.constants";
 import { FORBIDDEN_OPERATION_MESSAGE } from "src/common/constants/messages.constants";
 import { FindUsersQueryDto } from "./dto/find-users-query.dto";
+import {
+  getEffectiveAdminModules,
+  normalizeAdminModules,
+  UserRoles,
+} from "./types/user.types";
 
 @Injectable()
 export class UsersService {
@@ -44,6 +49,7 @@ export class UsersService {
       ...createUserDto,
       password: hashPassword,
       role: USER_ROLE,
+      adminModules: [],
       emailVerified: false,
       emailVerifiedAt: null,
       emailVerificationTokenHash: emailVerification.tokenHash,
@@ -94,6 +100,24 @@ export class UsersService {
     }
 
     const updatePayload: any = { ...updateUserDto };
+    const actorIsAdmin = tokenPayload.role === USER_ADMIN_ROLE;
+
+    if (!actorIsAdmin) {
+      [
+        "role",
+        "active",
+        "emailVerified",
+        "emailVerifiedAt",
+        "emailVerificationTokenHash",
+        "emailVerificationExpiresAt",
+        "passwordResetTokenHash",
+        "passwordResetExpiresAt",
+        "lastLoginAt",
+        "adminModules",
+      ].forEach((field) => {
+        delete updatePayload[field];
+      });
+    }
 
     if (updatePayload.password) {
       const passwordHash = await this.hashService.hash(updatePayload.password);
@@ -103,6 +127,20 @@ export class UsersService {
     if (updatePayload.profileImage !== undefined) {
       const normalizedProfileImage = updatePayload.profileImage.trim();
       updatePayload.profileImage = normalizedProfileImage || null;
+    }
+
+    const nextRole = (updatePayload.role || userExists.role) as UserRoles;
+
+    if (nextRole !== UserRoles.ADMIN) {
+      updatePayload.adminModules = [];
+    } else {
+      if (Array.isArray(updatePayload.adminModules)) {
+        updatePayload.adminModules = normalizeAdminModules(
+          updatePayload.adminModules
+        );
+      } else if (updatePayload.role === UserRoles.ADMIN && userExists.role !== UserRoles.ADMIN) {
+        updatePayload.adminModules = getEffectiveAdminModules(UserRoles.ADMIN, []);
+      }
     }
 
     const updatedUser = await this.usersRepository.update(id, updatePayload);

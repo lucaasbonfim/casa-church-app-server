@@ -41,6 +41,12 @@ export class User extends Model {
   @Column(DataType.BOOLEAN)
   declare emailVerified: boolean;
 
+  @Column({ type: DataType.JSONB, allowNull: true })
+  declare adminModules?: string[] | null;
+
+  @Column({ type: DataType.DATE, allowNull: true })
+  declare lastLoginAt?: Date | null;
+
   @Column({ type: DataType.DATE, allowNull: true })
   declare emailVerifiedAt?: Date | null;
 

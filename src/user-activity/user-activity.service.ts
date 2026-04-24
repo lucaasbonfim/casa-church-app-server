@@ -14,7 +14,7 @@ export class UserActivityService {
   ) {}
 
   async logActivity(
-    userId: string,
+    userId: string | null,
     method: string,
     endpoint: string,
     entityId?: string | null,

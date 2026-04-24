@@ -8,9 +8,16 @@ import {
   MaxLength,
   MinLength,
   IsEnum,
+  IsArray,
+  IsIn,
+  ArrayUnique,
 } from "class-validator";
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { UserRoles } from "../types/user.types";
+import {
+  ADMIN_FULL_ACCESS,
+  ADMIN_MODULE_VALUES,
+  UserRoles,
+} from "../types/user.types";
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiPropertyOptional({
@@ -65,4 +72,19 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
   @IsBoolean({ message: "O campo ativo deve ser um booleano." })
   active?: boolean;
+
+  @ApiPropertyOptional({
+    example: ["sermons", "lessons"],
+    description:
+      "Modulos administrativos liberados para o usuario admin. Use '*' para acesso total.",
+    isArray: true,
+  })
+  @IsOptional()
+  @IsArray({ message: "O campo modulos administrativos deve ser uma lista." })
+  @ArrayUnique({ message: "Nao repita modulos administrativos." })
+  @IsIn([ADMIN_FULL_ACCESS, ...ADMIN_MODULE_VALUES], {
+    each: true,
+    message: "Modulo administrativo invalido.",
+  })
+  adminModules?: string[];
 }

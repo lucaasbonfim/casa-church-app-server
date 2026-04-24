@@ -9,6 +9,8 @@ export declare class User extends Model {
     role: UserRoles;
     active: boolean;
     emailVerified: boolean;
+    adminModules?: string[] | null;
+    lastLoginAt?: Date | null;
     emailVerifiedAt?: Date | null;
     emailVerificationTokenHash?: string | null;
     emailVerificationExpiresAt?: Date | null;

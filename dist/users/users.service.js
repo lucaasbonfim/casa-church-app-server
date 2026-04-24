@@ -17,6 +17,7 @@ const hash_service_1 = require("../auth/hash/hash.service");
 const email_service_1 = require("../email/email.service");
 const user_constants_1 = require("./user.constants");
 const messages_constants_1 = require("../common/constants/messages.constants");
+const user_types_1 = require("./types/user.types");
 let UsersService = class UsersService {
     usersRepository;
     hashService;
@@ -36,6 +37,7 @@ let UsersService = class UsersService {
             ...createUserDto,
             password: hashPassword,
             role: user_constants_1.USER_ROLE,
+            adminModules: [],
             emailVerified: false,
             emailVerifiedAt: null,
             emailVerificationTokenHash: emailVerification.tokenHash,
@@ -74,6 +76,23 @@ let UsersService = class UsersService {
                 throw new common_1.ConflictException(user_constants_1.UPDATE_USER_CONFLICT_MESSAGE);
         }
         const updatePayload = { ...updateUserDto };
+        const actorIsAdmin = tokenPayload.role === user_constants_1.USER_ADMIN_ROLE;
+        if (!actorIsAdmin) {
+            [
+                "role",
+                "active",
+                "emailVerified",
+                "emailVerifiedAt",
+                "emailVerificationTokenHash",
+                "emailVerificationExpiresAt",
+                "passwordResetTokenHash",
+                "passwordResetExpiresAt",
+                "lastLoginAt",
+                "adminModules",
+            ].forEach((field) => {
+                delete updatePayload[field];
+            });
+        }
         if (updatePayload.password) {
             const passwordHash = await this.hashService.hash(updatePayload.password);
             updatePayload.password = passwordHash;
@@ -81,6 +100,18 @@ let UsersService = class UsersService {
         if (updatePayload.profileImage !== undefined) {
             const normalizedProfileImage = updatePayload.profileImage.trim();
             updatePayload.profileImage = normalizedProfileImage || null;
+        }
+        const nextRole = (updatePayload.role || userExists.role);
+        if (nextRole !== user_types_1.UserRoles.ADMIN) {
+            updatePayload.adminModules = [];
+        }
+        else {
+            if (Array.isArray(updatePayload.adminModules)) {
+                updatePayload.adminModules = (0, user_types_1.normalizeAdminModules)(updatePayload.adminModules);
+            }
+            else if (updatePayload.role === user_types_1.UserRoles.ADMIN && userExists.role !== user_types_1.UserRoles.ADMIN) {
+                updatePayload.adminModules = (0, user_types_1.getEffectiveAdminModules)(user_types_1.UserRoles.ADMIN, []);
+            }
         }
         const updatedUser = await this.usersRepository.update(id, updatePayload);
         return {

@@ -23,8 +23,8 @@ export class UserActivity extends Model<UserActivity> {
   declare id: string;
 
   @ForeignKey(() => User)
-  @Column({ type: DataType.UUID })
-  declare userId: string;
+  @Column({ type: DataType.UUID, allowNull: true })
+  declare userId: string | null;
 
   @BelongsTo(() => User)
   declare user: User;

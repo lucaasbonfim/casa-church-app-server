@@ -22,6 +22,7 @@ class UpdateUserDto extends (0, mapped_types_1.PartialType)(create_user_dto_1.Cr
     profileImage;
     role;
     active;
+    adminModules;
 }
 exports.UpdateUserDto = UpdateUserDto;
 __decorate([
@@ -83,4 +84,19 @@ __decorate([
     (0, class_validator_1.IsBoolean)({ message: "O campo ativo deve ser um booleano." }),
     __metadata("design:type", Boolean)
 ], UpdateUserDto.prototype, "active", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        example: ["sermons", "lessons"],
+        description: "Modulos administrativos liberados para o usuario admin. Use '*' para acesso total.",
+        isArray: true,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)({ message: "O campo modulos administrativos deve ser uma lista." }),
+    (0, class_validator_1.ArrayUnique)({ message: "Nao repita modulos administrativos." }),
+    (0, class_validator_1.IsIn)([user_types_1.ADMIN_FULL_ACCESS, ...user_types_1.ADMIN_MODULE_VALUES], {
+        each: true,
+        message: "Modulo administrativo invalido.",
+    }),
+    __metadata("design:type", Array)
+], UpdateUserDto.prototype, "adminModules", void 0);
 //# sourceMappingURL=update-user.dto.js.map

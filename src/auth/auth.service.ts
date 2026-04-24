@@ -23,6 +23,7 @@ import {
   INVALID_EMAIL_CONFIRMATION_TOKEN_MESSAGE,
   UNAUTHORIZED_EMAIL_PASSWORD_MESSAGE,
 } from "./auth.constants";
+import { getEffectiveAdminModules } from "src/users/types/user.types";
 
 @Injectable()
 export class AuthService {
@@ -49,12 +50,19 @@ export class AuthService {
       throw new ForbiddenException(EMAIL_NOT_VERIFIED_MESSAGE);
     }
 
+    await this.usersRepository.update(user.id, {
+      lastLoginAt: new Date(),
+    });
+
+    const adminModules = getEffectiveAdminModules(user.role, user.adminModules);
+
     const token = await this.jwtService.signAsync(
       {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
+        adminModules,
       },
       {
         secret: process.env.JWT_SECRET,
@@ -70,6 +78,8 @@ export class AuthService {
       name: user.name,
       email: user.email,
       profileImage: user.profileImage ?? null,
+      role: user.role,
+      adminModules,
     };
   }
 

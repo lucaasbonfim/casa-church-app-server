@@ -19,6 +19,8 @@ export declare class AuthService {
         name: string;
         email: string;
         profileImage: string | null;
+        role: import("src/users/types/user.types").UserRoles;
+        adminModules: string[];
     }>;
     confirmEmail(confirmEmailDto: ConfirmEmailDto): Promise<{
         message: string;

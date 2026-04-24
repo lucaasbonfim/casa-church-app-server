@@ -5,6 +5,7 @@ class TokenPayloadDto {
     id;
     email;
     role;
+    adminModules;
     iat;
     exp;
     aud;

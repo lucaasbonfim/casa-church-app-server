@@ -54,6 +54,14 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "emailVerified", void 0);
 __decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.JSONB, allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "adminModules", void 0);
+__decorate([
+    (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.DATE, allowNull: true }),
+    __metadata("design:type", Object)
+], User.prototype, "lastLoginAt", void 0);
+__decorate([
     (0, sequelize_typescript_2.Column)({ type: sequelize_typescript_2.DataType.DATE, allowNull: true }),
     __metadata("design:type", Object)
 ], User.prototype, "emailVerifiedAt", void 0);
