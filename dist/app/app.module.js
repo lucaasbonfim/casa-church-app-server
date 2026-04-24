@@ -32,6 +32,7 @@ const devotionals_module_1 = require("../devotionals/devotionals.module");
 const page_content_module_1 = require("../page-content/page-content.module");
 const cache_invalidation_interceptor_1 = require("../common/interceptors/cache-invalidation.interceptor");
 const gallery_module_1 = require("../gallery/gallery.module");
+const health_module_1 = require("../health/health.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -40,6 +41,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             database_module_1.DatabaseModule,
             data_cache_module_1.DataCacheModule,
+            health_module_1.HealthModule,
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
             events_module_1.EventsModule,
