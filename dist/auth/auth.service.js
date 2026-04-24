@@ -17,6 +17,7 @@ const hash_service_1 = require("./hash/hash.service");
 const jwt_1 = require("@nestjs/jwt");
 const email_service_1 = require("../email/email.service");
 const auth_constants_1 = require("./auth.constants");
+const user_types_1 = require("../users/types/user.types");
 let AuthService = class AuthService {
     usersRepository;
     hashService;
@@ -38,11 +39,16 @@ let AuthService = class AuthService {
         if (user.emailVerified === false) {
             throw new common_1.ForbiddenException(auth_constants_1.EMAIL_NOT_VERIFIED_MESSAGE);
         }
+        await this.usersRepository.update(user.id, {
+            lastLoginAt: new Date(),
+        });
+        const adminModules = (0, user_types_1.getEffectiveAdminModules)(user.role, user.adminModules);
         const token = await this.jwtService.signAsync({
             id: user.id,
             name: user.name,
             email: user.email,
             role: user.role,
+            adminModules,
         }, {
             secret: process.env.JWT_SECRET,
             audience: process.env.JWT_TOKEN_AUDIENCE,
@@ -55,6 +61,8 @@ let AuthService = class AuthService {
             name: user.name,
             email: user.email,
             profileImage: user.profileImage ?? null,
+            role: user.role,
+            adminModules,
         };
     }
     async confirmEmail(confirmEmailDto) {

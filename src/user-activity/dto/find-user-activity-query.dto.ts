@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
 import { IsOptional, IsUUID, IsString, IsInt, Min } from "class-validator";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 
 export class FindUserActivityQueryDto {
   @ApiPropertyOptional({
@@ -37,5 +37,8 @@ export class FindUserActivityQueryDto {
   })
   @IsOptional()
   @IsString({ message: "O campo action deve ser um texto válido." })
+  @Transform(({ value }) =>
+    typeof value === "string" ? value.toUpperCase() : value
+  )
   action?: string;
 }

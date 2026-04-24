@@ -34,6 +34,15 @@ $ npm install
 
 #### 3. Configure seu arquivo `.env` com as credenciais do banco de dados.
 
+Para habilitar galeria de fotos em storage externo (Cloudinary), adicione:
+
+```
+CLOUDINARY_CLOUD_NAME=seu_cloud_name
+CLOUDINARY_API_KEY=sua_api_key
+CLOUDINARY_API_SECRET=sua_api_secret
+GALLERY_ROOT_FOLDER=casa-church/gallery
+```
+
 #### 4. Execute o projeto:
 
 - Modo desenvolvimento:

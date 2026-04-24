@@ -4,7 +4,7 @@ import { UserActivityRepository } from "./user-activity.repository";
 export declare class UserActivityService {
     private readonly userActivityRepository;
     constructor(userActivityRepository: UserActivityRepository);
-    logActivity(userId: string, method: string, endpoint: string, entityId?: string | null, description?: string): Promise<void>;
+    logActivity(userId: string | null, method: string, endpoint: string, entityId?: string | null, description?: string): Promise<void>;
     create(createDto: CreateUserActivityDto): Promise<{
         message: string;
         activity: import("./entities/user-activity.model").UserActivity;

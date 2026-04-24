@@ -8,5 +8,6 @@ export declare class UpdateUserDto extends UpdateUserDto_base {
     profileImage?: string;
     role?: UserRoles;
     active?: boolean;
+    adminModules?: string[];
 }
 export {};

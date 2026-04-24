@@ -14,6 +14,7 @@ const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const auth_constants_1 = require("../auth.constants");
 const auth_users_service_1 = require("../auth-users.service");
+const user_types_1 = require("../../users/types/user.types");
 let AuthTokenGuard = class AuthTokenGuard {
     jwtService;
     authUsersService;
@@ -40,6 +41,7 @@ let AuthTokenGuard = class AuthTokenGuard {
                 ...payload,
                 role: user.role,
                 id: user.id,
+                adminModules: (0, user_types_1.getEffectiveAdminModules)(user.role, user.adminModules),
             };
         }
         catch (error) {

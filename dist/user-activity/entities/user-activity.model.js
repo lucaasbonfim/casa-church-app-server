@@ -25,8 +25,8 @@ __decorate([
 ], UserActivity.prototype, "id", void 0);
 __decorate([
     (0, sequelize_typescript_1.ForeignKey)(() => models_1.User),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.UUID }),
-    __metadata("design:type", String)
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.UUID, allowNull: true }),
+    __metadata("design:type", Object)
 ], UserActivity.prototype, "userId", void 0);
 __decorate([
     (0, sequelize_typescript_1.BelongsTo)(() => models_1.User),

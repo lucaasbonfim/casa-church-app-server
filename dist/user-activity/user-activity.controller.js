@@ -20,8 +20,6 @@ const find_user_activity_query_dto_1 = require("./dto/find-user-activity-query.d
 const swagger_1 = require("@nestjs/swagger");
 const auth_token_guard_1 = require("../auth/guard/auth-token.guard");
 const common_2 = require("@nestjs/common");
-const cache_manager_1 = require("@nestjs/cache-manager");
-const user_activity_interceptor_1 = require("../common/interceptors/user-activity.interceptor");
 let UserActivityController = class UserActivityController {
     userActivityService;
     constructor(userActivityService) {
@@ -52,7 +50,6 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Listar todas as atividades registradas" }),
     (0, common_1.Get)(),
-    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [find_user_activity_query_dto_1.FindUserActivityQueryDto]),
@@ -61,7 +58,6 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Listar detalhes de uma atividade específica" }),
     (0, common_1.Get)(":id"),
-    (0, common_1.UseInterceptors)(cache_manager_1.CacheInterceptor),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -78,7 +74,6 @@ __decorate([
 exports.UserActivityController = UserActivityController = __decorate([
     (0, swagger_1.ApiSecurity)("auth-token"),
     (0, common_2.UseGuards)(auth_token_guard_1.AuthTokenGuard),
-    (0, common_1.UseInterceptors)(user_activity_interceptor_1.UserActivityInterceptor),
     (0, common_1.Controller)("user-activity"),
     __metadata("design:paramtypes", [user_activity_service_1.UserActivityService])
 ], UserActivityController);

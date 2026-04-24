@@ -58,6 +58,7 @@ __decorate([
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)({ message: "O campo action deve ser um texto válido." }),
+    (0, class_transformer_1.Transform)(({ value }) => typeof value === "string" ? value.toUpperCase() : value),
     __metadata("design:type", String)
 ], FindUserActivityQueryDto.prototype, "action", void 0);
 //# sourceMappingURL=find-user-activity-query.dto.js.map

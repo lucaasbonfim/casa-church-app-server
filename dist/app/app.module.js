@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
+const core_1 = require("@nestjs/core");
 const database_module_1 = require("../config/database.module");
 const data_cache_module_1 = require("../config/data-cache.module");
 const auth_module_1 = require("../auth/auth.module");
@@ -29,6 +30,9 @@ const church_houses_module_1 = require("../church-houses/church-houses.module");
 const home_content_module_1 = require("../home-content/home-content.module");
 const devotionals_module_1 = require("../devotionals/devotionals.module");
 const page_content_module_1 = require("../page-content/page-content.module");
+const cache_invalidation_interceptor_1 = require("../common/interceptors/cache-invalidation.interceptor");
+const gallery_module_1 = require("../gallery/gallery.module");
+const health_module_1 = require("../health/health.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,6 +41,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             database_module_1.DatabaseModule,
             data_cache_module_1.DataCacheModule,
+            health_module_1.HealthModule,
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
             events_module_1.EventsModule,
@@ -56,6 +61,13 @@ exports.AppModule = AppModule = __decorate([
             page_content_module_1.PageContentModule,
             event_feedbacks_module_1.EventFeedbacksModule,
             user_activity_module_1.UserActivityModule,
+            gallery_module_1.GalleryModule,
+        ],
+        providers: [
+            {
+                provide: core_1.APP_INTERCEPTOR,
+                useClass: cache_invalidation_interceptor_1.CacheInvalidationInterceptor,
+            },
         ],
     })
 ], AppModule);

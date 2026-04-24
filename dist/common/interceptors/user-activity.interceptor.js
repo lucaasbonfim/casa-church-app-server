@@ -24,7 +24,7 @@ let UserActivityInterceptor = class UserActivityInterceptor {
     intercept(context, next) {
         const request = context.switchToHttp().getRequest();
         const authHeader = request.headers.authorization;
-        let userId = "anonymous";
+        let userId = null;
         if (authHeader && typeof authHeader === "string") {
             try {
                 const token = authHeader.replace("Bearer ", "").trim();
@@ -37,8 +37,8 @@ let UserActivityInterceptor = class UserActivityInterceptor {
                 throw new common_1.UnauthorizedException("Token inválido ou malformado");
             }
         }
-        const method = request.method;
-        const path = request.route?.path || request.url;
+        const method = request.method?.toUpperCase();
+        const path = (request.originalUrl || request.url || request.route?.path || "").split("?")[0];
         const body = { ...request.body };
         delete body.password;
         return next.handle().pipe((0, rxjs_1.tap)(async (response) => {

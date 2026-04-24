@@ -15,5 +15,5 @@ import { ChurchHouse } from "src/church-houses/entities/church-house.model";
 import { HomeContent } from "src/home-content/entities/home-content.model";
 import { Devotional } from "src/devotionals/entities/devotional.model";
 import { PageContent } from "src/page-content/entities/page-content.model";
-export declare const models: (typeof User | typeof Event | typeof Registration | typeof Post | typeof Sermon | typeof Lesson | typeof ContactMessage | typeof Donation | typeof Like | typeof Location | typeof ChurchHouse | typeof HomeContent | typeof Devotional | typeof LessonProgress | typeof EventFeedback | typeof PageContent)[];
+export declare const models: (typeof User | typeof Event | typeof Location | typeof Registration | typeof Post | typeof Sermon | typeof Lesson | typeof Donation | typeof Like | typeof LessonProgress | typeof EventFeedback | typeof Devotional | typeof ContactMessage | typeof ChurchHouse | typeof HomeContent | typeof PageContent)[];
 export { User, Event, Registration, Post, Sermon, Lesson, ContactMessage, Donation, Like, Comment, Location, ChurchHouse, HomeContent, Devotional, LessonProgress, EventFeedback, PageContent, };

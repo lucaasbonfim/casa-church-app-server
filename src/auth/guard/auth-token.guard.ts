@@ -8,6 +8,7 @@ import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
 import { REQUEST_TOKEN_PAYLOAD } from "../auth.constants";
 import { AuthUsersService } from "../auth-users.service";
+import { getEffectiveAdminModules } from "src/users/types/user.types";
 
 @Injectable()
 export class AuthTokenGuard implements CanActivate {
@@ -39,6 +40,7 @@ export class AuthTokenGuard implements CanActivate {
         ...payload,
         role: user.role,
         id: user.id,
+        adminModules: getEffectiveAdminModules(user.role, user.adminModules),
       };
     } catch (error) {
       throw new UnauthorizedException("Token inválido ou expirado");

@@ -12,4 +12,6 @@ export declare class UserActivityRepository {
     }>;
     findById(id: string): Promise<UserActivity | null>;
     delete(id: string): Promise<void>;
+    private attachUsers;
+    private isUuid;
 }

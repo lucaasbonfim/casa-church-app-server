@@ -14,6 +14,16 @@ import { models } from "src/models";
       models: models,
       autoLoadModels: true,
       synchronize: true,
+      hooks: {
+        afterConnect: async (connection: any) => {
+          await connection.query(
+            'ALTER TABLE "casa-church"."users" ADD COLUMN IF NOT EXISTS "lastLoginAt" TIMESTAMP NULL;'
+          );
+          await connection.query(
+            'ALTER TABLE "casa-church"."users" ADD COLUMN IF NOT EXISTS "adminModules" JSONB NULL;'
+          );
+        },
+      },
       logging: false,
       dialectOptions:
         process.env.PGSSLMODE === "require"

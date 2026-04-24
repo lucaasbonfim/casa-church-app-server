@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserActivityRepository = void 0;
 const sequelize_1 = require("@nestjs/sequelize");
 const user_activity_model_1 = require("./entities/user-activity.model");
+const models_1 = require("../models");
+const sequelize_2 = require("sequelize");
 let UserActivityRepository = class UserActivityRepository {
     userActivityModel;
     constructor(userActivityModel) {
@@ -30,30 +32,62 @@ let UserActivityRepository = class UserActivityRepository {
         const where = {};
         if (userId)
             where.userId = userId;
-        if (action)
+        if (action) {
             where.action = action;
+        }
+        else {
+            where.action = { [sequelize_2.Op.ne]: "GET" };
+        }
         const { rows, count } = await this.userActivityModel.findAndCountAll({
             where,
             limit,
             offset,
             order: [["createdAt", "DESC"]],
         });
+        const activities = await this.attachUsers(rows);
         return {
             total: count,
             page,
             totalPages: Math.ceil(count / limit),
-            activities: rows,
+            activities,
         };
     }
     async findById(id) {
         const activity = await this.userActivityModel.findByPk(id);
-        return activity;
+        if (!activity)
+            return activity;
+        const [enriched] = await this.attachUsers([activity]);
+        return enriched;
     }
     async delete(id) {
         const activity = await this.findById(id);
         if (activity)
             await activity.destroy();
         return;
+    }
+    async attachUsers(activities) {
+        const validUserIds = Array.from(new Set(activities
+            .map((activity) => activity.userId)
+            .filter((userId) => this.isUuid(userId))));
+        if (validUserIds.length === 0) {
+            activities.forEach((activity) => activity.setDataValue("user", null));
+            return activities;
+        }
+        const users = await models_1.User.findAll({
+            where: { id: { [sequelize_2.Op.in]: validUserIds } },
+            attributes: ["id", "name", "email", "role"],
+        });
+        const usersById = new Map(users.map((user) => [user.id, user]));
+        activities.forEach((activity) => {
+            const user = activity.userId ? usersById.get(activity.userId) || null : null;
+            activity.setDataValue("user", user);
+        });
+        return activities;
+    }
+    isUuid(value) {
+        if (!value)
+            return false;
+        return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
     }
 };
 exports.UserActivityRepository = UserActivityRepository;
