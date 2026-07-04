@@ -39,11 +39,29 @@ let EmailService = EmailService_1 = class EmailService {
     getBrevoApiKey() {
         return process.env.BREVO_API_KEY || process.env.API_MCP_REVO;
     }
-    getLogoUrl(inlineLogo) {
+    getLogoUrl(inlineLogo, publicPageUrl) {
         const logoUrl = process.env.EMAIL_LOGO_URL;
         if (logoUrl && this.isPublicHttpUrl(logoUrl))
             return logoUrl;
+        if (!inlineLogo) {
+            const pageLogoUrl = this.buildPublicLogoUrl(publicPageUrl);
+            if (pageLogoUrl)
+                return pageLogoUrl;
+            const frontendLogoUrl = `${this.getFrontendUrl()}/logo-email.png`;
+            return this.isPublicHttpUrl(frontendLogoUrl) ? frontendLogoUrl : "";
+        }
         return inlineLogo ? `cid:${INLINE_LOGO_CID}` : "";
+    }
+    buildPublicLogoUrl(publicPageUrl) {
+        if (!publicPageUrl)
+            return "";
+        try {
+            const logoUrl = new URL("/logo-email.png", publicPageUrl).toString();
+            return this.isPublicHttpUrl(logoUrl) ? logoUrl : "";
+        }
+        catch {
+            return "";
+        }
     }
     buildLogoImage(logoUrl) {
         if (!logoUrl)
@@ -203,7 +221,7 @@ let EmailService = EmailService_1 = class EmailService {
         return { sent: true };
     }
     buildVerificationTemplate({ name, verificationUrl }, options = { inlineLogo: true }) {
-        const logoUrl = this.getLogoUrl(options.inlineLogo);
+        const logoUrl = this.getLogoUrl(options.inlineLogo, verificationUrl);
         const logoImage = this.buildLogoImage(logoUrl);
         const inlineLogoAttachment = this.getInlineLogoAttachment(options.inlineLogo);
         const firstName = name?.trim()?.split(/\s+/)[0] || "ola";
@@ -262,7 +280,7 @@ let EmailService = EmailService_1 = class EmailService {
         };
     }
     buildPasswordResetTemplate({ name, resetUrl }, options = { inlineLogo: true }) {
-        const logoUrl = this.getLogoUrl(options.inlineLogo);
+        const logoUrl = this.getLogoUrl(options.inlineLogo, resetUrl);
         const logoImage = this.buildLogoImage(logoUrl);
         const inlineLogoAttachment = this.getInlineLogoAttachment(options.inlineLogo);
         const firstName = name?.trim()?.split(/\s+/)[0] || "ola";
