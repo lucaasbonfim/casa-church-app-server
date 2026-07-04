@@ -19,6 +19,29 @@ type SendPasswordResetEmailParams = {
   resetUrl: string;
 };
 
+type InlineLogoAttachment = {
+  filename: string;
+  path: string;
+  cid: string;
+  contentType: string;
+  contentDisposition: "inline";
+};
+
+type EmailTemplateOptions = {
+  inlineLogo: boolean;
+};
+
+type SendEmailParams = {
+  to: string;
+  subject: string;
+  html: string;
+  attachments?: InlineLogoAttachment[];
+};
+
+type BrevoSendResponse = {
+  messageId?: string;
+};
+
 const INLINE_LOGO_CID = "casa-church-logo";
 
 @Injectable()
@@ -33,12 +56,45 @@ export class EmailService {
     );
   }
 
-  private getLogoUrl() {
+  private getEmailFrom() {
+    return (
+      process.env.EMAIL_FROM ||
+      `"Casa Church" <${process.env.SMTP_USER || "noreply@casachurch.com"}>`
+    );
+  }
+
+  private parseEmailFrom(from: string) {
+    const match = String(from || "").match(/^(.+?)\s*<(.+?)>$/);
+
+    if (match) {
+      return {
+        name: match[1].replace(/^"|"$/g, "").trim() || "Casa Church",
+        email: match[2].trim(),
+      };
+    }
+
+    return {
+      name: "Casa Church",
+      email: from || "noreply@casachurch.com",
+    };
+  }
+
+  private getBrevoApiKey() {
+    return process.env.BREVO_API_KEY || process.env.API_MCP_REVO;
+  }
+
+  private getLogoUrl(inlineLogo: boolean) {
     const logoUrl = process.env.EMAIL_LOGO_URL;
 
-    return logoUrl && this.isPublicHttpUrl(logoUrl)
-      ? logoUrl
-      : `cid:${INLINE_LOGO_CID}`;
+    if (logoUrl && this.isPublicHttpUrl(logoUrl)) return logoUrl;
+
+    return inlineLogo ? `cid:${INLINE_LOGO_CID}` : "";
+  }
+
+  private buildLogoImage(logoUrl: string) {
+    if (!logoUrl) return "";
+
+    return `<img src="${logoUrl}" width="86" alt="Casa Church" style="display:block;border:0;max-width:86px;height:auto;margin:0 auto 22px;" />`;
   }
 
   private isPublicHttpUrl(url: string) {
@@ -55,7 +111,11 @@ export class EmailService {
     }
   }
 
-  private getInlineLogoAttachment() {
+  private getInlineLogoAttachment(
+    inlineLogo: boolean,
+  ): InlineLogoAttachment | null {
+    if (!inlineLogo) return null;
+
     const logoUrl = process.env.EMAIL_LOGO_URL;
 
     if (logoUrl && this.isPublicHttpUrl(logoUrl)) return null;
@@ -95,16 +155,111 @@ export class EmailService {
     return this.transporter;
   }
 
+  private async sendViaBrevo({ to, subject, html }: SendEmailParams) {
+    const apiKey = this.getBrevoApiKey();
+    if (!apiKey) return null;
+
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "api-key": apiKey,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        sender: this.parseEmailFrom(this.getEmailFrom()),
+        to: [{ email: to }],
+        subject,
+        htmlContent: html,
+      }),
+    });
+
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new Error(`Brevo API ${response.status}${body ? `: ${body}` : ""}`);
+    }
+
+    const data = (await response.json().catch(() => ({}))) as BrevoSendResponse;
+
+    this.logger.log(
+      `Email enviado via Brevo para ${to}${
+        data.messageId ? ` (messageId: ${data.messageId})` : ""
+      }`,
+    );
+
+    return { sent: true };
+  }
+
+  private async trySendViaBrevo(params: SendEmailParams) {
+    try {
+      const result = await this.sendViaBrevo(params);
+      if (result) return true;
+    } catch (error) {
+      this.logger.error(`Brevo API falhou: ${this.getErrorMessage(error)}`);
+    }
+
+    return false;
+  }
+
+  private async sendViaSmtp({
+    to,
+    subject,
+    html,
+    attachments,
+  }: SendEmailParams) {
+    const transporter = this.getTransporter();
+    if (!transporter) return null;
+
+    await transporter.sendMail({
+      from: this.getEmailFrom(),
+      to,
+      subject,
+      html,
+      attachments,
+    });
+
+    return { sent: true };
+  }
+
+  private getErrorMessage(error: unknown) {
+    return error instanceof Error ? error.message : String(error);
+  }
+
   async sendVerificationEmail({
     to,
     name,
     verificationUrl,
   }: SendVerificationEmailParams) {
-    const transporter = this.getTransporter();
+    const subject = "Confirme seu email - Casa Church";
+    const brevoTemplate = this.buildVerificationTemplate(
+      { name, verificationUrl },
+      { inlineLogo: false },
+    );
 
-    if (!transporter) {
+    if (
+      await this.trySendViaBrevo({
+        to,
+        subject,
+        html: brevoTemplate.html,
+      })
+    ) {
+      return { sent: true };
+    }
+
+    const smtpTemplate = this.buildVerificationTemplate(
+      { name, verificationUrl },
+      { inlineLogo: true },
+    );
+    const smtpResult = await this.sendViaSmtp({
+      to,
+      subject,
+      html: smtpTemplate.html,
+      attachments: smtpTemplate.attachments,
+    });
+
+    if (!smtpResult) {
       this.logger.warn(
-        `SMTP nao configurado. Link de confirmacao para ${to}: ${verificationUrl}`,
+        `Email nao configurado. Link de confirmacao para ${to}: ${verificationUrl}`,
       );
 
       if (process.env.NODE_ENV === "production") {
@@ -115,17 +270,6 @@ export class EmailService {
 
       return { sent: false };
     }
-
-    const template = this.buildVerificationTemplate({ name, verificationUrl });
-
-    await transporter.sendMail({
-      from:
-        process.env.EMAIL_FROM || `"Casa Church" <${process.env.SMTP_USER}>`,
-      to,
-      subject: "Confirme seu email - Casa Church",
-      html: template.html,
-      attachments: template.attachments,
-    });
 
     return { sent: true };
   }
@@ -135,11 +279,36 @@ export class EmailService {
     name,
     resetUrl,
   }: SendPasswordResetEmailParams) {
-    const transporter = this.getTransporter();
+    const subject = "Redefina sua senha - Casa Church";
+    const brevoTemplate = this.buildPasswordResetTemplate(
+      { name, resetUrl },
+      { inlineLogo: false },
+    );
 
-    if (!transporter) {
+    if (
+      await this.trySendViaBrevo({
+        to,
+        subject,
+        html: brevoTemplate.html,
+      })
+    ) {
+      return { sent: true };
+    }
+
+    const smtpTemplate = this.buildPasswordResetTemplate(
+      { name, resetUrl },
+      { inlineLogo: true },
+    );
+    const smtpResult = await this.sendViaSmtp({
+      to,
+      subject,
+      html: smtpTemplate.html,
+      attachments: smtpTemplate.attachments,
+    });
+
+    if (!smtpResult) {
       this.logger.warn(
-        `SMTP nao configurado. Link de redefinicao de senha para ${to}: ${resetUrl}`,
+        `Email nao configurado. Link de redefinicao de senha para ${to}: ${resetUrl}`,
       );
 
       if (process.env.NODE_ENV === "production") {
@@ -151,26 +320,18 @@ export class EmailService {
       return { sent: false };
     }
 
-    const template = this.buildPasswordResetTemplate({ name, resetUrl });
-
-    await transporter.sendMail({
-      from:
-        process.env.EMAIL_FROM || `"Casa Church" <${process.env.SMTP_USER}>`,
-      to,
-      subject: "Redefina sua senha - Casa Church",
-      html: template.html,
-      attachments: template.attachments,
-    });
-
     return { sent: true };
   }
 
-  private buildVerificationTemplate({
-    name,
-    verificationUrl,
-  }: Omit<SendVerificationEmailParams, "to">) {
-    const logoUrl = this.getLogoUrl();
-    const inlineLogoAttachment = this.getInlineLogoAttachment();
+  private buildVerificationTemplate(
+    { name, verificationUrl }: Omit<SendVerificationEmailParams, "to">,
+    options: EmailTemplateOptions = { inlineLogo: true },
+  ) {
+    const logoUrl = this.getLogoUrl(options.inlineLogo);
+    const logoImage = this.buildLogoImage(logoUrl);
+    const inlineLogoAttachment = this.getInlineLogoAttachment(
+      options.inlineLogo,
+    );
     const firstName = name?.trim()?.split(/\s+/)[0] || "ola";
 
     return {
@@ -189,7 +350,7 @@ export class EmailService {
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#151922;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;">
                   <tr>
                     <td align="center" style="padding:34px 28px 18px;">
-                      <img src="${logoUrl}" width="86" alt="Casa Church" style="display:block;border:0;max-width:86px;height:auto;margin:0 auto 22px;" />
+                      ${logoImage}
                       <p style="margin:0 0 10px;color:#9ca3af;font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;">Casa Church Global</p>
                       <h1 style="margin:0;color:#ffffff;font-size:28px;line-height:1.2;font-weight:800;">Confirme seu email</h1>
                     </td>
@@ -228,12 +389,15 @@ export class EmailService {
     };
   }
 
-  private buildPasswordResetTemplate({
-    name,
-    resetUrl,
-  }: Omit<SendPasswordResetEmailParams, "to">) {
-    const logoUrl = this.getLogoUrl();
-    const inlineLogoAttachment = this.getInlineLogoAttachment();
+  private buildPasswordResetTemplate(
+    { name, resetUrl }: Omit<SendPasswordResetEmailParams, "to">,
+    options: EmailTemplateOptions = { inlineLogo: true },
+  ) {
+    const logoUrl = this.getLogoUrl(options.inlineLogo);
+    const logoImage = this.buildLogoImage(logoUrl);
+    const inlineLogoAttachment = this.getInlineLogoAttachment(
+      options.inlineLogo,
+    );
     const firstName = name?.trim()?.split(/\s+/)[0] || "ola";
 
     return {
@@ -252,7 +416,7 @@ export class EmailService {
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#151922;border:1px solid rgba(255,255,255,0.12);border-radius:18px;overflow:hidden;">
                   <tr>
                     <td align="center" style="padding:34px 28px 18px;">
-                      <img src="${logoUrl}" width="86" alt="Casa Church" style="display:block;border:0;max-width:86px;height:auto;margin:0 auto 22px;" />
+                      ${logoImage}
                       <p style="margin:0 0 10px;color:#9ca3af;font-size:12px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;">Casa Church Global</p>
                       <h1 style="margin:0;color:#ffffff;font-size:28px;line-height:1.2;font-weight:800;">Redefina sua senha</h1>
                     </td>
