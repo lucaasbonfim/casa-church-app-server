@@ -16,6 +16,7 @@ export declare class EmailService {
     private parseEmailFrom;
     private getBrevoApiKey;
     private getLogoUrl;
+    private buildPublicLogoUrl;
     private buildLogoImage;
     private isPublicHttpUrl;
     private getInlineLogoAttachment;

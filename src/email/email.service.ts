@@ -83,12 +83,33 @@ export class EmailService {
     return process.env.BREVO_API_KEY || process.env.API_MCP_REVO;
   }
 
-  private getLogoUrl(inlineLogo: boolean) {
+  private getLogoUrl(inlineLogo: boolean, publicPageUrl?: string) {
     const logoUrl = process.env.EMAIL_LOGO_URL;
 
     if (logoUrl && this.isPublicHttpUrl(logoUrl)) return logoUrl;
 
+    if (!inlineLogo) {
+      const pageLogoUrl = this.buildPublicLogoUrl(publicPageUrl);
+      if (pageLogoUrl) return pageLogoUrl;
+
+      const frontendLogoUrl = `${this.getFrontendUrl()}/logo-email.png`;
+
+      return this.isPublicHttpUrl(frontendLogoUrl) ? frontendLogoUrl : "";
+    }
+
     return inlineLogo ? `cid:${INLINE_LOGO_CID}` : "";
+  }
+
+  private buildPublicLogoUrl(publicPageUrl?: string) {
+    if (!publicPageUrl) return "";
+
+    try {
+      const logoUrl = new URL("/logo-email.png", publicPageUrl).toString();
+
+      return this.isPublicHttpUrl(logoUrl) ? logoUrl : "";
+    } catch {
+      return "";
+    }
   }
 
   private buildLogoImage(logoUrl: string) {
@@ -327,7 +348,7 @@ export class EmailService {
     { name, verificationUrl }: Omit<SendVerificationEmailParams, "to">,
     options: EmailTemplateOptions = { inlineLogo: true },
   ) {
-    const logoUrl = this.getLogoUrl(options.inlineLogo);
+    const logoUrl = this.getLogoUrl(options.inlineLogo, verificationUrl);
     const logoImage = this.buildLogoImage(logoUrl);
     const inlineLogoAttachment = this.getInlineLogoAttachment(
       options.inlineLogo,
@@ -393,7 +414,7 @@ export class EmailService {
     { name, resetUrl }: Omit<SendPasswordResetEmailParams, "to">,
     options: EmailTemplateOptions = { inlineLogo: true },
   ) {
-    const logoUrl = this.getLogoUrl(options.inlineLogo);
+    const logoUrl = this.getLogoUrl(options.inlineLogo, resetUrl);
     const logoImage = this.buildLogoImage(logoUrl);
     const inlineLogoAttachment = this.getInlineLogoAttachment(
       options.inlineLogo,
